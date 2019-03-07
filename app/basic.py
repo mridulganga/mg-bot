@@ -7,7 +7,7 @@ from app.fun import fun_handler
 
 animal_list = ["dog","bark","bork","cat","meow","pussy","panda","redpanda",
                 "pika","pikachu","fox"]
-fun_list = ["google","joke", "meme", "quote", "xkcd"]
+fun_list = ["google","joke", "meme", "quote", "xkcd", "geek", "geekjoke"]
 monopoly_list = ["balance","daily","buy","sell","steal"]
 
 def start(bot, update):
@@ -17,7 +17,7 @@ def start(bot, update):
 def help(bot, update):
     update.message.reply_text('''Help is Here!
     Fun:
-    joke, google, meme, quote, xkcd
+    joke, google, meme, quote, xkcd, geek
 
     Animals:
     dog, cat, panda, fox, redpanda, pika

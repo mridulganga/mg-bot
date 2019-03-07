@@ -34,3 +34,7 @@ def fun_handler(bot, update, msg_list):
         contents = requests.get('https://xkcd.com/'+num+'/info.0.json').json()
         url = contents["img"]
         bot.send_photo(chat_id=update.message.chat_id, photo=url)
+
+    elif msg_list[1] in ["geek","geekjoke"]:
+        contents = requests.get("https://geek-jokes.sameerkumar.website/api").text
+        update.message.reply_text(contents)
