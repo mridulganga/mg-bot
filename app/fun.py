@@ -38,3 +38,21 @@ def fun_handler(bot, update, msg_list):
     elif msg_list[1] in ["geek","geekjoke"]:
         contents = requests.get("https://geek-jokes.sameerkumar.website/api").text
         update.message.reply_text(contents)
+
+    elif msg_list[1] in ["dice"]:
+        import random
+        num = random.randint(1,6)
+        update.message.reply_text("Dice : " + str(num))
+
+    elif msg_list[1] in ["coin","flip"]:
+        import random
+        num = random.randint(1,2)
+        txt = "Heads!"
+        if num == 2: txt = "Tails!"
+        update.message.reply_text(txt)
+
+    elif msg_list[1] in ["choose","select"]:
+        import random
+        item_list=msg_list[2:]
+        num =random.randint(0,len(item_list)-1)
+        update.message.reply_text(item_list[num])

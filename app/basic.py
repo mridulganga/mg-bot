@@ -8,7 +8,8 @@ from app.poll import poll_extras_handler
 
 animal_list = ["dog","bark","bork","cat","meow","pussy","panda","redpanda",
                 "pika","pikachu","fox"]
-fun_list = ["google","joke", "roast", "mock", "meme", "quote", "xkcd", "geek", "geekjoke"]
+fun_list = ["google","joke", "roast", "mock", "meme", "quote", "xkcd",
+                "geek", "geekjoke", "dice", "coin", "flip", "choose","select"]
 monopoly_list = ["balance","daily","buy","sell","steal"]
 
 def start(bot, update):
@@ -18,7 +19,10 @@ def start(bot, update):
 def help(bot, update):
     update.message.reply_text('''Help is Here!
     Fun:
-    joke, google, meme, quote, xkcd, geek
+    joke, google, meme, quote, xkcd, geek, coin, dice
+
+    Choose:
+    pls choose item1 item2 item3
 
     Animals:
     dog, cat, panda, fox, redpanda, pika
@@ -28,6 +32,12 @@ def help(bot, update):
     pls todo item       -add todo 
     pls todo remove 2   -remove 2nd item
     pls todo remove     -remove everything
+
+    Poll:
+    pls poll            -create new poll
+    pls vote 2          -vote for 2nd option
+    pls vote            -show poll votes
+    pls vote end        -end poll and show results
     ''')
 
 
