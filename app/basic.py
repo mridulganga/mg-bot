@@ -4,10 +4,11 @@ import datetime
 from app.todo import todo_handler
 from app.animals import animal_handler
 from app.fun import fun_handler
+from app.poll import poll_extras_handler
 
 animal_list = ["dog","bark","bork","cat","meow","pussy","panda","redpanda",
                 "pika","pikachu","fox"]
-fun_list = ["google","joke", "meme", "quote", "xkcd", "geek", "geekjoke"]
+fun_list = ["google","joke", "roast", "mock", "meme", "quote", "xkcd", "geek", "geekjoke"]
 monopoly_list = ["balance","daily","buy","sell","steal"]
 
 def start(bot, update):
@@ -23,10 +24,10 @@ def help(bot, update):
     dog, cat, panda, fox, redpanda, pika
 
     Todo:
-    pls todo    #list todos
-    pls todo item   #add todo 
-    pls todo remove 2   #remove 2nd item
-    pls todo remove     #remove everything
+    pls todo            -list todos
+    pls todo item       -add todo 
+    pls todo remove 2   -remove 2nd item
+    pls todo remove     -remove everything
     ''')
 
 
@@ -54,6 +55,8 @@ def msg_parser(bot, update):
             pass
         elif msg_list[1] in ["now", "time"]:
             update.message.reply_text(str(datetime.datetime.utcnow()))
+        elif msg_list[1] in ["vote","poll"]:
+            poll_extras_handler(bot, update, msg_list)
         elif msg_list[1] == "help":
             help(bot,update)
         else:
