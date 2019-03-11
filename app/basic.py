@@ -5,12 +5,15 @@ from app.todo import todo_handler
 from app.animals import animal_handler
 from app.fun import fun_handler
 from app.poll import poll_extras_handler
+from app.monopoly import mono_handler
 
 animal_list = ["dog","bark","bork","cat","meow","pussy","panda","redpanda",
                 "pika","pikachu","fox"]
 fun_list = ["google","joke", "roast", "mock", "meme", "quote", "xkcd",
                 "geek", "geekjoke", "dice", "coin", "flip", "choose","select"]
-monopoly_list = ["balance","daily","buy","sell","steal"]
+monopoly_list = ["balance","daily","buy","sell","steal", "shop", "market", "store", "buy",
+                "purchase", "sell", "inventory", "balance", "deposit", "withdraw",
+                "lottery", "gamble", "share", "send", "steal", "rich"]
 
 def start(bot, update):
     update.message.reply_text('Hi!')
@@ -53,8 +56,8 @@ def msg_parser(bot, update):
             animal_handler(bot, update, msg_list)
         elif msg_list[1] in ["games","game"]:
             pass
-        elif msg_list[1] in ["money","currency"]:
-            pass 
+        elif msg_list[1] in monopoly_list:
+            mono_handler(bot,update,msg_list)
         elif msg_list[1] in ["images", "image", "pics", "pic", "photos", "photo"]:
             pass 
         elif msg_list[1] in fun_list:

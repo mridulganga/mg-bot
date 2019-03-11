@@ -15,7 +15,9 @@ updater = None
 
 def main():
     global updater
-    updater = Updater("713920275:AAGzidB_hHqdm5XoaiUXQCK8RUg0HLDIjaI")
+    mg_token = "713920275:AAGzidB_hHqdm5XoaiUXQCK8RUg0HLDIjaI"
+    gopika_token = "715910035:AAFNGBByrhz-uiBfcOHVd84JsQSg3HHntOM"
+    updater = Updater(gopika_token)
 
     dp = updater.dispatcher
     
