@@ -82,7 +82,7 @@ def check_mono_initialized(chat_id,username):
 
 def mono_handler(bot, update, msg_list):
     chat_id = update.message.chat_id
-    username = update.message.from_user.username
+    username = update.message.from_user.username.lower()
     
     # Check if the monopoly has been initialised. (the chat_id and/or the username)
     check_mono_initialized(chat_id, username)
@@ -242,7 +242,7 @@ def mono_handler(bot, update, msg_list):
             user["wallet"] -= money
         import random
         game = random.randint(1,2)
-        multiplier =  float(random.randint(20,50) /100)
+        multiplier =  float(random.randint(80,100) /100)
         if game==2:  # win
             money += money * multiplier
             user["wallet"] += int(money)
