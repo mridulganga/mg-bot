@@ -15,7 +15,11 @@ help_dict = {
     ("poll",) : "*Poll Usage*:\n`pls poll      -create new poll\npls vote 2    -vote for 2nd option\npls vote      -show poll votes\npls vote end  -end poll and show results`",
     ("vote",) : "`pls vote 2\npls vote end`",
 
-    ("todo",) : "*Todo Usage*:\n`pls todo           -list todos\npls todo item      -add todo \npls todo remove 2  -remove 2nd item\npls todo remove    -remove everything\n`"
+    ("todo",) : "*Todo Usage*:\n`pls todo           -list todos\npls todo item      -add todo \npls todo remove 2  -remove 2nd item\npls todo remove    -remove everything\n`",
+
+    ("fun",) : "*Fun Commands*:\n`joke, google, meme, quote, xkcd, geek, coin, dice`",
+    ("choose",) : "*Choose*:\n`pls choose item1 item2 item3`",
+    ("animals",) : "*Animals*:\n`dog, cat, panda, fox, redpanda, pika`"
 }
 
 def get_help(query):

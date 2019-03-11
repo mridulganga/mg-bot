@@ -2,6 +2,10 @@ from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 import telegram
 import datetime
 
+def log_command(s):
+    with open("log.txt", "a") as myfile:
+        myfile.write(s)
+
 from app.todo import todo_handler
 from app.animals import animal_handler
 from app.fun import fun_handler
@@ -89,7 +93,7 @@ def msg_parser(bot, update):
         else:
             #help_handler(bot,update,msg_list)
             pass
-        print(msg_list)
+        log_command(str(update.message.chat_id) + "  || " + update.message.from_user.username + " : " + str(msg_list) + "\n")
     elif msg_list[0] in ["hello","hi"]:
         update.message.reply_text("Hello there!")
         
