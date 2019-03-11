@@ -1,4 +1,5 @@
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+import telegram
 import datetime
 
 from app.todo import todo_handler
@@ -6,6 +7,7 @@ from app.animals import animal_handler
 from app.fun import fun_handler
 from app.poll import poll_extras_handler
 from app.monopoly import mono_handler
+from app.help_strings import get_help
 
 animal_list = ["dog","bark","bork","cat","meow","pussy","panda","redpanda",
                 "pika","pikachu","fox"]
@@ -19,29 +21,41 @@ def start(bot, update):
     update.message.reply_text('Hi!')
 
 
-def help(bot, update):
-    update.message.reply_text('''Help is Here!
-    Fun:
-    joke, google, meme, quote, xkcd, geek, coin, dice
+def help(bot, update, msg_list):
+    if len(msg_list) > 2:
+        help_str = get_help(msg_list[2])
+        # update.message.reply_text("Help : \n" + help_str)
+        bot.send_message(chat_id=update.message.chat_id, 
+                text=help_str, 
+                parse_mode=telegram.ParseMode.MARKDOWN)
+    else:
+        help_str = "*Main Sections*:\n`Fun\nChoose\nAnimals\nTodo\nPoll\nMonopoly\n\n`*Use*:\n`pls help command`"
 
-    Choose:
-    pls choose item1 item2 item3
+        bot.send_message(chat_id=update.message.chat_id, 
+                text=help_str, 
+                parse_mode=telegram.ParseMode.MARKDOWN)
+    # update.message.reply_text('''Help is Here!
+    # Fun:
+    # joke, google, meme, quote, xkcd, geek, coin, dice
 
-    Animals:
-    dog, cat, panda, fox, redpanda, pika
+    # Choose:
+    # pls choose item1 item2 item3
 
-    Todo:
-    pls todo            -list todos
-    pls todo item       -add todo 
-    pls todo remove 2   -remove 2nd item
-    pls todo remove     -remove everything
+    # Animals:
+    # dog, cat, panda, fox, redpanda, pika
 
-    Poll:
-    pls poll            -create new poll
-    pls vote 2          -vote for 2nd option
-    pls vote            -show poll votes
-    pls vote end        -end poll and show results
-    ''')
+    # Todo:
+    # pls todo            -list todos
+    # pls todo item       -add todo 
+    # pls todo remove 2   -remove 2nd item
+    # pls todo remove     -remove everything
+
+    # Poll:
+    # pls poll            -create new poll
+    # pls vote 2          -vote for 2nd option
+    # pls vote            -show poll votes
+    # pls vote end        -end poll and show results
+    # ''')
 
 
 def error(bot, update):
@@ -71,7 +85,7 @@ def msg_parser(bot, update):
         elif msg_list[1] in ["vote","poll"]:
             poll_extras_handler(bot, update, msg_list)
         elif msg_list[1] == "help":
-            help(bot,update)
+            help(bot,update,msg_list)
         else:
             #help_handler(bot,update,msg_list)
             pass
