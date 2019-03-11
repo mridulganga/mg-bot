@@ -272,11 +272,17 @@ def mono_handler(bot, update, msg_list):
         steal_or_not = random.randint(1,2)
         if steal_or_not == 2: # steal successfull
             money = mono[chat_id]["users"][steal_from]["wallet"]
+            if money < 2:
+                update.message.reply_text("No point stealing from broke people.")
+                return
             how_much = random.randint(1,int(money/2))
             mono[chat_id]["users"][steal_from]["wallet"] -= how_much
             user["wallet"] += how_much
             update.message.reply_text("You were able to steal " + str(how_much) + " from " + steal_from)
         else: # caught
+            if user["wallet"] < 2:
+                update.message.reply_text("You dont have money to get stealing equipment.")
+                return
             how_much = random.randint(1,int(user["wallet"]/2))
             user["wallet"] -= how_much
             mono[chat_id]["users"][steal_from]["wallet"] += how_much
