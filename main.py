@@ -19,8 +19,6 @@ def main():
     f2 = open('api/gopika','r')
     mg_token = f1.read()
     gopika_token = f2.read()
-    # mg_token = "713920275:AAGzidB_hHqdm5XoaiUXQCK8RUg0HLDIjaI"
-    # gopika_token = "715910035:AAFNGBByrhz-uiBfcOHVd84JsQSg3HHntOM"
     updater = Updater(gopika_token)
 
     dp = updater.dispatcher
