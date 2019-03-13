@@ -1,14 +1,12 @@
-import logging
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+from app.logger import debug_logger
+import sys
 
-# from app.basic import start, help, error, msg_parser
+# put all errors in a file
+sys.stderr = open("logs/stderr","a")
+
 import app.basic as basic
 from app.poll import poll_handler
-
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                    level=logging.INFO)
-
-logger = logging.getLogger(__name__)
 
 updater = None
 
@@ -22,6 +20,8 @@ def main():
     updater = Updater(gopika_token)
 
     dp = updater.dispatcher
+
+    debug_logger.info("HELLO THERE")
     
     dp.add_handler(CommandHandler("start", basic.start))
     dp.add_handler(CommandHandler("help", basic.help))
@@ -34,6 +34,7 @@ def main():
 
     updater.start_polling()
     updater.idle()
+
 
 if __name__ == '__main__':
     main()
