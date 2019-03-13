@@ -1,5 +1,5 @@
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
-
+import datetime
 # {
 #     chatid : {
 #         users : {
@@ -236,17 +236,26 @@ def mono_handler(bot, update, msg_list):
     # pls gamble all
     # pls gamble 50
     elif msg_list[1] in ["gamble"]:
+        # check wallet status
         if msg_list[2] == "all":
             money = user["wallet"]
+            if money < 2:
+                update.message.reply_text("You dont have enough money to gamble.")
+                return
             user["wallet"] = 0
         else:
             money = int(msg_list[2])
+            if money < 2 or money > user["wallet"]:
+                update.message.reply_text("You dont have enough money to gamble.")
+                return
             user["wallet"] -= money
+
         import random
         game = random.randint(1,2)
         multiplier =  float(random.randint(80,100) /100)
+
         if game==2:  # win
-            money += money * multiplier
+            money += int(money * multiplier)
             user["wallet"] += int(money)
             update.message.reply_text("Congrats!!\nYou won this round. You got " + str(money))
         else: # lose
@@ -258,7 +267,7 @@ def mono_handler(bot, update, msg_list):
     elif msg_list[1] in ["share","send"]:
         to_user = msg_list[2].replace("@","")
         money = int(msg_list[3])
-        if user["wallet"] > money:
+        if user["wallet"] > money and money > 0:
             user["wallet"] -= money
             mono[chat_id]["users"][to_user]["wallet"] += money
             update.message.reply_text("Money has been sent.")
@@ -291,11 +300,21 @@ def mono_handler(bot, update, msg_list):
 
     elif msg_list[1] in ["beg"]:
         import random
+        if "last_beg" in user:
+            if not (datetime.datetime.today() - user["last_beg"]).seconds > 10:
+                update.message.reply_text("You're begging too much. Stop it!! (wait %d seconds)" % \
+                                    (10-int((datetime.datetime.today() - user["last_beg"]).seconds)))
+                return
         donators = ["Liam", "Noah", "William", "James", "Logan", "Benjamin", "Mason", "Elijah", "Oliver", "Jacob", "Lucas", "Michael", "Alexander", "Ethan", "Daniel", "Matthew", "Aiden", "Henry", "Joseph", "Jackson", "Samuel", "Sebastian", "David", "Carter", "Wyatt", "Jayden", "John", "Owen", "Dylan", "Luke", "Gabriel", "Anthony", "Isaac", "Grayson", "Jack", "Julian", "Levi", "Christopher", "Joshua", "Andrew", "Lincoln", "Mateo", "Ryan", "Jaxon", "Nathan", "Aaron", "Isaiah", "Thomas", "Charles", "Caleb", "Josiah", "Christian", "Hunter", "Eli", "Jonathan", "Connor", "Landon", "Adrian", "Asher", "Cameron", "Leo", "Theodore", "Jeremiah", "Hudson", "Robert", "Easton", "Nolan", "Nicholas", "Ezra", "Colton", "Angel", "Brayden", "Jordan", "Dominic", "Austin", "Ian", "Adam", "Elias", "Jaxson", "Greyson", "Jose", "Ezekiel", "Carson", "Evan", "Maverick", "Bryson", "Jace", "Cooper", "Xavier", "Parker", "Roman", "Jason", "Santiago", "Chase", "Sawyer", "Gavin", "Leonardo", "Kayden", "Ayden", "Jameson", "Kevin", "Bentley", "Zachary", "Everett", "Axel", "Tyler", "Micah", "Vincent", "Weston", "Miles", "Wesley", "Nathaniel", "Harrison", "Brandon", "Cole", "Declan", "Luis", "Braxton", "Damian", "Silas", "Tristan", "Ryder", "Bennett", "George", "Emmett", "Justin", "Kai", "Max", "Diego", "Luca", "Ryker", "Carlos", "Maxwell", "Kingston", "Ivan", "Maddox", "Juan", "Ashton", "Jayce", "Rowan", "Kaiden", "Giovanni", "Eric", "Jesus", "Calvin", "Abel", "King", "Camden", "Amir", "Blake", "Alex", "Brody", "Malachi", "Emmanuel", "Jonah", "Beau", "Jude", "Antonio", "Alan", "Elliott", "Elliot", "Waylon", "Xander", "Timothy", "Victor", "Bryce", "Finn", "Brantley", "Edward", "Abraham", "Patrick", "Grant", "Karter", "Hayden", "Richard", "Miguel", "Joel", "Gael", "Tucker", "Rhett", "Avery", "Steven", "Graham", "Kaleb", "Jasper", "Jesse", "Matteo", "Dean", "Zayden", "Preston", "August", "Oscar", "Jeremy", "Alejandro", "Marcus", "Dawson", "Lorenzo", "Messiah", "Zion", "Maximus"]
+        beg_lines = ["go buy some food", "go gamble it", "go smoke some weed", "go eat some muffins", "go cry in the corner", "go buy some clothes", "go spend it wisely", "go get a life"]
+        
         beg_from = donators[random.randint(0,len(donators)-1)]
+        beg_line = beg_lines[random.randint(0,len(beg_lines)-1)]
+        
         beg_amount = random.randint(1,100)
         user["wallet"] += beg_amount
-        update.message.reply_text(beg_from + " donated " + str(beg_amount) + " go buy some food.")
+        user["last_beg"] = datetime.datetime.today()
+        update.message.reply_text(beg_from + " donated " + str(beg_amount) + " " + beg_line)
 
     # elif msg_list[1] in ["rich"]:
     #     from collections import OrderedDict
