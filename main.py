@@ -20,8 +20,6 @@ def main():
     updater = Updater(gopika_token)
 
     dp = updater.dispatcher
-
-    debug_logger.info("HELLO THERE")
     
     dp.add_handler(CommandHandler("start", basic.start))
     dp.add_handler(CommandHandler("help", basic.help))
