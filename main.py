@@ -1,5 +1,15 @@
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+
 # from app.logger import debug_logger
+
+# need this to log erros
+import logging
+import sys
+sys.stderr = open("logs/stderr","a")
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',	
+                    level=logging.INFO)	
+logger = logging.getLogger(__name__)
+# do not remove
 
 
 import app.basic as basic
