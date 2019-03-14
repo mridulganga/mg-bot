@@ -63,3 +63,9 @@ def fun_handler(bot, update, msg_list):
         else:
             username = update.message.from_user.username
         bot.send_photo(chat_id=update.message.chat_id, photo="https://api.adorable.io/avatars/285/"+ username +"@adorable.io.png")
+
+
+    elif msg_list[1] in ["unsplash","wall","wallpaper"]:
+        import random
+        num = str(random.randint(1,100000000))
+        bot.send_photo(chat_id=update.message.chat_id, photo="https://source.unsplash.com/random?random&cat&time="+num)
