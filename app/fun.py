@@ -56,3 +56,10 @@ def fun_handler(bot, update, msg_list):
         item_list=msg_list[2:]
         num =random.randint(0,len(item_list)-1)
         update.message.reply_text(item_list[num])
+
+    elif msg_list[1] in ["avatar"]:
+        if len(msg_list) > 2:
+            username = msg_list[2].replace("@","")
+        else:
+            username = update.message.from_user.username
+        bot.send_photo(chat_id=update.message.chat_id, photo="https://api.adorable.io/avatars/285/"+ username +"@adorable.io.png")
