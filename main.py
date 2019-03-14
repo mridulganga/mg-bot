@@ -1,9 +1,6 @@
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
-from app.logger import debug_logger
-import sys
+# from app.logger import debug_logger
 
-# put all errors in a file
-sys.stderr = open("logs/stderr","a")
 
 import app.basic as basic
 from app.poll import poll_handler
