@@ -50,6 +50,10 @@ def msg_parser(bot, update):
     msg = update.message.text.lower()
     msg_list = msg.split(" ")
     if msg_list[0] in ["mg","pls", "kini"]:
+
+        if len(msg_list) == 1:
+            return
+
         if msg_list[1] in animal_list:
             animal_handler(bot, update, msg_list)
 
