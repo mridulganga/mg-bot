@@ -2,3 +2,4 @@ venv/
 api/
 data/
 logs/
+app/__pycache__/

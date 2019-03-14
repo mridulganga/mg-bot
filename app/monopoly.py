@@ -94,9 +94,6 @@ def mono_handler(bot, update, msg_list):
 
     user = mono[chat_id]["users"][username]
 
-
-
-
     # pls balance
     # pls deposit 100
     # pls withdraw 500
@@ -347,11 +344,29 @@ def mono_handler(bot, update, msg_list):
         search_string = search_strings[random.randint(0,len(search_strings)-1)]
         update.message.reply_text("Congrats you found " + str(money) + " " + search_string)
 
-    # elif msg_list[1] in ["rich"]:
-    #     from collections import OrderedDict
-    #     users = mono[chat_id]["users"]
-    #     d_desc = OrderedDict(sorted(users.items(), key=lambda kv: users[kv]["wallet"]))
-    #     update.message.reply_text("Ranks :\n1. " + max_user1 + "\n2. " + max_user2 + "\n3. "+ max_user3)
+    elif msg_list[1] in ["rich"]:
+        users = dict(mono[chat_id]["users"])
+        max_list = []
+        for i in range(3):
+            max_wallet = -1
+            max_user = None
+            for u in users:
+                if users[u]["wallet"] > max_wallet:
+                    max_wallet = users[u]["wallet"]
+                    max_user = u 
+            max_list.append((max_user,max_wallet))
+            try: 
+                users.pop(max_user)
+            except:
+                break
+        riches = "Rich People : \n"
+        for item in max_list:
+            u,w = item
+            if u != None:
+                riches += u + "  ("+ str(w) +")\n"
+        update.message.reply_text(riches)
+
+
 
     # Finally save the monopoly data
     save_mono()
