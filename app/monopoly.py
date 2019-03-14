@@ -11,7 +11,8 @@ import datetime
 #                     item 2 : (quantity, price)
 #                 },
 #                 "last_beg" : datetime.datetime(2019, 3, 13, 8, 33, 36, 261052),
-#                 "last_daily" : datetime.datetime(2019, 3, 13, 8, 33, 36, 261052)
+#                 "last_daily" : datetime.datetime(2019, 3, 13, 8, 33, 36, 261052),
+#                 "last_search" : datetime.datetime(2019, 3, 13, 8, 33, 36, 261052)
 #             }
 #         },
 #         shop : {
@@ -315,7 +316,7 @@ def mono_handler(bot, update, msg_list):
         beg_from = donators[random.randint(0,len(donators)-1)]
         beg_line = beg_lines[random.randint(0,len(beg_lines)-1)]
         
-        beg_amount = random.randint(1,100)
+        beg_amount = random.randint(10,60)
         user["wallet"] += beg_amount
         user["last_beg"] = datetime.datetime.today()
         update.message.reply_text(beg_from + " donated " + str(beg_amount) + " " + beg_line)
@@ -323,7 +324,7 @@ def mono_handler(bot, update, msg_list):
 
     elif msg_list[1] in ["daily"]:
         if "last_daily" in user:
-            if not (datetime.datetime.today() - user["last_daily"]).days < 1:
+            if (datetime.datetime.today() - user["last_daily"]).days < 1:
                 update.message.reply_text("You have already gotten your share for the day, try again tomorrow.")
                 return
         import random
@@ -332,6 +333,20 @@ def mono_handler(bot, update, msg_list):
         user["last_daily"] = datetime.datetime.today()
         update.message.reply_text("You got %d for the day, spend it wisely." % money)
         
+
+    elif msg_list[1] in ["search"]:
+        if "last_search" in user:
+            if (datetime.datetime.today() - user["last_search"]).seconds < 5:
+                update.message.reply_text("You need to wait a bit to continue searching.")
+                return
+        import random
+        money = random.randint(20,100)
+        user["wallet"] += money
+        user["last_search"] = datetime.datetime.today()
+        search_strings = ["under the sofa", "inside the hidden pocket", "inside the kitchen box", "inside the safe", "inside the boot of your vehicle", "inside the lunchbox", "behind your phone car", "inside your girlfriend's bag", "inside the flush tank", "inside your bong pot", "inside a random person's buttcrack", "inside the dimensions of space", "inside the Washing machine lint drawer", "inside your cat's litter box"]
+        search_string = search_strings[random.randint(0,len(search_strings)-1)]
+        update.message.reply_text("Congrats you found " + str(money) + " " + search_string)
+
     # elif msg_list[1] in ["rich"]:
     #     from collections import OrderedDict
     #     users = mono[chat_id]["users"]
