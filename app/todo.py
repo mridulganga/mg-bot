@@ -1,6 +1,5 @@
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 
-
 def save_todo(dic):
     f = open('data/todo','w')
     f.write(str(dic))
@@ -21,7 +20,6 @@ def todo_handler(bot, update, msg_list):
     # Make todo list for group
     if not update.message.chat_id in todo:
         todo[update.message.chat_id] = []
-
 
     if len(msg_list) == 1:
         if len(todo[update.message.chat_id]) > 0:
