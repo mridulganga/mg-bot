@@ -9,7 +9,9 @@ import datetime
 #                 inventory : {
 #                     item 1 : (quantity, price),
 #                     item 2 : (quantity, price)
-#                 }
+#                 },
+#                 "last_beg" : datetime.datetime(2019, 3, 13, 8, 33, 36, 261052),
+#                 "last_daily" : datetime.datetime(2019, 3, 13, 8, 33, 36, 261052)
 #             }
 #         },
 #         shop : {
@@ -277,21 +279,23 @@ def mono_handler(bot, update, msg_list):
 
     elif msg_list[1] in ["steal"]:
         steal_from = msg_list[2].replace("@","")
+
+        money = mono[chat_id]["users"][steal_from]["wallet"]
+        if money < 200 or user["wallet"] < 200:
+            update.message.reply_text("Both you and the victim should have minimun 200 in the wallet to steal.")
+            return
+
         import random
         steal_or_not = random.randint(1,2)
+
         if steal_or_not == 2: # steal successfull
-            money = mono[chat_id]["users"][steal_from]["wallet"]
-            if money < 2:
-                update.message.reply_text("No point stealing from broke people.")
-                return
+            
             how_much = random.randint(1,int(money/2))
             mono[chat_id]["users"][steal_from]["wallet"] -= how_much
             user["wallet"] += how_much
             update.message.reply_text("You were able to steal " + str(how_much) + " from " + steal_from)
         else: # caught
-            if user["wallet"] < 2:
-                update.message.reply_text("You dont have money to get stealing equipment.")
-                return
+            
             how_much = random.randint(1,int(user["wallet"]/2))
             user["wallet"] -= how_much
             mono[chat_id]["users"][steal_from]["wallet"] += how_much
@@ -316,6 +320,18 @@ def mono_handler(bot, update, msg_list):
         user["last_beg"] = datetime.datetime.today()
         update.message.reply_text(beg_from + " donated " + str(beg_amount) + " " + beg_line)
 
+
+    elif msg_list[1] in ["daily"]:
+        if "last_daily" in user:
+            if not (datetime.datetime.today() - user["last_daily"]).days < 1:
+                update.message.reply_text("You have already gotten your share for the day, try again tomorrow.")
+                return
+        import random
+        money = random.randint(200,300)
+        user["wallet"] += money
+        user["last_daily"] = datetime.datetime.today()
+        update.message.reply_text("You got %d for the day, spend it wisely." % money)
+        
     # elif msg_list[1] in ["rich"]:
     #     from collections import OrderedDict
     #     users = mono[chat_id]["users"]
