@@ -69,3 +69,11 @@ def fun_handler(bot, update, msg_list):
         import random
         num = str(random.randint(1,100000000))
         bot.send_photo(chat_id=update.message.chat_id, photo="https://source.unsplash.com/random?random&cat&time="+num)
+
+
+    elif msg_list[1] in ["die", "kill"]:
+        import random
+        ways_to_die = ["died in the sewer.", "ate a tube of superglue", "sold both the kidneys on the internet.", "Kept a rattle snake as a pet, which bit them.", "got sat on by an elephant.", "fell into elephant shit.", "drank horse piss and said yum.", "disturbed a nest of wasps for no good reason, got stung.", "took their helmet off in outer space.", "ate a two week old unrefridgerated pie.", "set fire to their hair.", "asked milan how to use git and got aws advice.", "held the door, HODOR.", "saw their face in the mirror, and felt a need to make it go away."]
+        way_to_die = ways_to_die[random.randint(0,len(ways_to_die)-1)]
+        uname = msg_list[2].replace("@","")
+        update.message.reply_text(uname + " " + way_to_die)

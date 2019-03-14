@@ -21,7 +21,7 @@ animal_list = ["dog","bark","bork","cat","meow","pussy","panda","redpanda",
 
 fun_list = ["google","joke", "roast", "mock", "meme", "quote", "xkcd", "avatar", 
                 "geek", "geekjoke", "dice", "coin", "flip", "choose","select",
-                "unsplash", "wall", "wallpaper",]
+                "unsplash", "wall", "wallpaper","die", "kill"]
 
 monopoly_list = ["balance","daily", "search","buy","sell","steal", "shop", "market", "store", "buy",
                 "purchase", "sell", "inventory", "balance", "deposit", "withdraw",
