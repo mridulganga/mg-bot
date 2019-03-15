@@ -92,13 +92,11 @@ def poll_extras_handler(bot,update,msg_list):
             end_poll(bot,update)
         else:
             pobj = poll[update.message.chat_id]
-            print(pobj)
             n = int(msg_list[2]) -1
             if int(n) in range(len(pobj["options"])): 
                 pobj["votes"][update.message.from_user.username] = n
                 save_poll()
                 update.message.reply_text("Voted!")
-                print(str(update.message.chat_id) + pobj)
             else:
                 update.message.reply_text("Option out of range!")
 
