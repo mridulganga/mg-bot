@@ -105,7 +105,10 @@ def mono_handler(bot, update, msg_list):
         bankbalance = user["bankbalance"]
         update.message.reply_text("Balance Information: \n Wallet: "+ str(wallet) + "\n Bank: " + str(bankbalance) )
 
-    
+
+
+    # pls deposit all
+    # pls deposit 200
     elif msg_list[1] in ["deposit"]:
         if msg_list[2] == "all":
             user["bankbalance"] += user["wallet"]
@@ -121,6 +124,9 @@ def mono_handler(bot, update, msg_list):
                 update.message.reply_text("You dont have that kind of money in your wallet.")
         
 
+
+    # pls withdraw all
+    # pls withdraw 200
     elif msg_list[1] in ["withdraw"]:
         if msg_list[2] == "all":
             user["wallet"] += user["bankbalance"]
@@ -138,10 +144,6 @@ def mono_handler(bot, update, msg_list):
 
 
     # pls shop
-    # pls buy coke
-    # pls sell chips
-    # pls inventory
-    # View the Items in the Shop
     elif msg_list[1] in ["shop","market", "store"]:
         shop = mono[chat_id]["shop"]
         items_str = "Shop Items :\n--------------\n"
@@ -150,6 +152,9 @@ def mono_handler(bot, update, msg_list):
             items_str += key + "  ("+ str(q) +") = Rs" + str(p) + "\n"
         update.message.reply_text(items_str)
     
+
+
+    # pls buy coke
     # Buy items at store
     elif msg_list[1] in ["buy", "purchase"]:
         shop= mono[chat_id]["shop"]
@@ -171,6 +176,7 @@ def mono_handler(bot, update, msg_list):
             update.message.reply_text("Item is out of stock.")
 
     
+    # pls sell coke
     elif msg_list[1] in ["sell"]:
         shop = mono[chat_id]["shop"]
         shop_item = msg_list[2]
@@ -188,6 +194,9 @@ def mono_handler(bot, update, msg_list):
         update.message.reply_text("Item has been sold")
         
 
+
+    # pls inventory
+    # View the Items in the Shop
     elif msg_list[1] in ["inventory"]:
         inventory = user["inventory"]
         items_str = "Inventory Items :\n"
@@ -263,7 +272,8 @@ def mono_handler(bot, update, msg_list):
 
 
 
-
+    # pls share @username 100
+    # pls send @username 100
     elif msg_list[1] in ["share","send"]:
         to_user = msg_list[2].replace("@","")
         money = int(msg_list[3])
@@ -275,31 +285,36 @@ def mono_handler(bot, update, msg_list):
             update.message.reply_text("You dont have so much money to share.")
 
 
+
+    # pls steal @username
+    # need minumum 200
     elif msg_list[1] in ["steal"]:
         steal_from = msg_list[2].replace("@","")
-
+        # check minimum 200 in either wallets
         money = mono[chat_id]["users"][steal_from]["wallet"]
-        if money < 200 or user["wallet"] < 200:
+        if money <= 200 or user["wallet"] <= 200:
             update.message.reply_text("Both you and the victim should have minimun 200 in the wallet to steal.")
             return
-
+        # success or got caught
         import random
         steal_or_not = random.randint(1,2)
 
         if steal_or_not == 2: # steal successfull
-            
             how_much = random.randint(1,int(money/2))
             mono[chat_id]["users"][steal_from]["wallet"] -= how_much
             user["wallet"] += how_much
             update.message.reply_text("You were able to steal " + str(how_much) + " from " + steal_from)
+
         else: # caught
-            
             how_much = random.randint(1,int(user["wallet"]/2))
             user["wallet"] -= how_much
             mono[chat_id]["users"][steal_from]["wallet"] += how_much
             update.message.reply_text("Damn! You got caught and paid " + str(how_much) + " to " + steal_from)
 
 
+
+    # pls beg
+    # beg timer = 10s
     elif msg_list[1] in ["beg"]:
         import random
         if "last_beg" in user:
@@ -319,10 +334,15 @@ def mono_handler(bot, update, msg_list):
         update.message.reply_text(beg_from + " donated " + str(beg_amount) + " " + beg_line)
 
 
+    # pls daily
+    # daily timer = 1 day
     elif msg_list[1] in ["daily"]:
         if "last_daily" in user:
-            if (datetime.datetime.today() - user["last_daily"]).days < 1:
-                update.message.reply_text("You have already gotten your share for the day, try again tomorrow.")
+            diff_time = (datetime.datetime.today() - user["last_daily"])
+            if diff_time.days < 1:
+                diff_time = datetime.timedelta(days=1) - diff_time
+                time_left = str(diff_time.seconds//3600) + "hrs and " + str((diff_time.seconds//60)%60) + "mins"
+                update.message.reply_text("You have already gotten your share for the day, try again after " + time_left)
                 return
         import random
         money = random.randint(200,300)
@@ -331,10 +351,12 @@ def mono_handler(bot, update, msg_list):
         update.message.reply_text("You got %d for the day, spend it wisely." % money)
         
 
+    # pls search
+    # search timer = 10s
     elif msg_list[1] in ["search"]:
         if "last_search" in user:
-            if (datetime.datetime.today() - user["last_search"]).seconds < 5:
-                update.message.reply_text("You need to wait a bit to continue searching.")
+            if (datetime.datetime.today() - user["last_search"]).seconds < 10:
+                update.message.reply_text("You need to wait "+ str(10-(datetime.datetime.today() - user["last_search"]).seconds) +"s to continue searching.")
                 return
         import random
         money = random.randint(20,100)
@@ -344,6 +366,10 @@ def mono_handler(bot, update, msg_list):
         search_string = search_strings[random.randint(0,len(search_strings)-1)]
         update.message.reply_text("Congrats you found " + str(money) + " " + search_string)
 
+
+
+    # pls rich
+    # list top 3 rich people
     elif msg_list[1] in ["rich"]:
         users = dict(mono[chat_id]["users"])
         max_list = []
