@@ -20,11 +20,10 @@ updater = None
 
 def main():
     global updater
-    f1 = open('api/mg','r')
-    f2 = open('api/gopika','r')
-    mg_token = f1.read()
-    gopika_token = f2.read()
-    updater = Updater(gopika_token)
+    f = open('api/token','r')
+    token = f.read()
+    updater = Updater(token)
+    f.close()
 
     dp = updater.dispatcher
     
