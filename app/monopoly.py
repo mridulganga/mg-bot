@@ -5,14 +5,6 @@ from app.db import *
 
 
 
-# item : (quantity, price)
-shop_template = {
-    "chips" : (15,10),
-    "coke" : (10,25),
-    "cake" : (5,100),
-    "laptop" : (5, 1000),
-}
-
 # the username can only be initialised by user
 def check_mono_initialized(chat_id,username):
     create_user(chat_id, username)
