@@ -46,7 +46,7 @@ def help(bot, update, msg_list):
                 parse_mode=telegram.ParseMode.MARKDOWN)
 
 def error(bot, update, msg_list):
-    debug_logger.debug(update.message.chat_id + " - " + update.message.from_user.username + " || " + msg_list)
+    debug_logger.debug(str(update.message.chat_id) + " - " + update.message.from_user.username + " || " + str(msg_list))
 
 
 def msg_parser(bot, update):
