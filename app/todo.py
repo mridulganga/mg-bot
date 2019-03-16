@@ -1,46 +1,32 @@
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+from app.db import add_todo, get_todos, clear_todos, remove_todo
 
-def save_todo(dic):
-    f = open('data/todo','w')
-    f.write(str(dic))
-    f.close()
-
-def load_todo():
-    f = open('data/todo','r')
-    data=f.read()
-    f.close()
-    return eval(data)
-
-
-todo = load_todo()
 
 def todo_handler(bot, update, msg_list):
-    global todo
-
-    # Make todo list for group
-    if not update.message.chat_id in todo:
-        todo[update.message.chat_id] = []
+    chat_id = update.message.chat_id
 
     if len(msg_list) == 1:
-        if len(todo[update.message.chat_id]) > 0:
-            todo_str = str("\n".join(["- " + s for s in todo[update.message.chat_id]]))
-            update.message.reply_text(todo_str)
-        else:
-            update.message.reply_text("TODO list is empty.")
+        todos = get_todos(chat_id)
+        if todos.count == 0:
+            update.message.reply_text("Todo list is empty.")
+            return
+        todo_str = "Todos :\n"
+        for todo in todos:
+            todo_str += "- " + todo["todo"] + "\n"
+        update.message.reply_text(todo_str)
+
     elif msg_list[1] in ["remove", "delete"]:
         if len(msg_list) > 2:
             n = int(msg_list[2])
-            todo[update.message.chat_id].pop(n-1)
-            save_todo(todo)
+            remove_todo(chat_id, n)
         else:
-            todo[update.message.chat_id].clear()
-            save_todo(todo)
-        update.message.reply_text("TODO has been removed.")
+            clear_todos(chat_id)
+        update.message.reply_text("TODO(s) have been removed.")
+
     elif msg_list[1] in ["clear","removeall"]:
-        todo[update.message.chat_id].clear()
-        save_todo(todo)
-        update.message.reply_text("TODO has been cleared.")
+        clear_todos(chat_id)
+        update.message.reply_text("TODO(s) have been removed.")
+    
     else:
-        todo[update.message.chat_id].append(" ".join(msg_list[1:]))
-        save_todo(todo)
+        add_todo(chat_id, " ".join(msg_list[1:]))
         update.message.reply_text("TODO has been added.")

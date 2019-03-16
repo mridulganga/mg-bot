@@ -23,9 +23,9 @@ fun_list = ["google","joke", "roast", "mock", "meme", "quote", "xkcd", "avatar",
                 "geek", "geekjoke", "dice", "coin", "flip", "choose","select",
                 "unsplash", "wall", "wallpaper","die", "kill"]
 
-monopoly_list = ["balance","daily", "search","buy","sell","steal", "shop", "market", "store", "buy",
-                "purchase", "sell", "inventory", "balance", "deposit", "withdraw",
-                "lottery", "gamble", "share", "send", "steal", "rich", "beg"]
+monopoly_list = ["balance", "beg", "daily", "search", "buy", "sell", "use", "steal", "shop", "market", "store", 
+                "purchase", "inventory", "deposit", "withdraw",
+                "lottery", "gamble", "share", "send", "rich"]
 
 def start(bot, update):
     update.message.reply_text('Hi!')
