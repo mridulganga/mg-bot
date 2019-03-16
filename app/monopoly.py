@@ -110,7 +110,7 @@ def mono_handler(bot, update, msg_list):
     # pls deposit all
     # pls deposit 200
     elif msg_list[1] in ["deposit"]:
-        if msg_list[2] == "all":
+        if len(msg_list) == 2 or msg_list[2] == "all":
             user["bankbalance"] += user["wallet"]
             user["wallet"] = 0
             update.message.reply_text("All your money is deposited.")
@@ -128,12 +128,16 @@ def mono_handler(bot, update, msg_list):
     # pls withdraw all
     # pls withdraw 200
     elif msg_list[1] in ["withdraw"]:
-        if msg_list[2] == "all":
+        if len(msg_list) == 2 or msg_list[2] == "all":
             user["wallet"] += user["bankbalance"]
             user["bankbalance"] = 0 
             update.message.reply_text("All your money is withdrawn.")
         else:
-            money = int(msg_list[2])
+            try:
+                money = int(msg_list[2])
+            except:
+                update.message.reply_text("Please Enter a numeric value or all.")
+                return
             if money <= user["bankbalance"]:
                 user["wallet"] += money
                 user["bankbalance"] -= money
