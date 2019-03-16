@@ -279,6 +279,9 @@ def mono_handler(bot, update, msg_list):
     # pls share @username 100
     # pls send @username 100
     elif msg_list[1] in ["share","send"]:
+        if len(msg_list) == 2:
+            update.message.reply_text("Please specify the user and amount, see \npls help share")
+            return
         to_user = msg_list[2].replace("@","")
         money = int(msg_list[3])
         if user["wallet"] > money and money > 0:
