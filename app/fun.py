@@ -67,7 +67,7 @@ def fun_handler(bot, update, msg_list):
     elif msg_list[1] in ["unsplash","wall","wallpaper"]:
         import random
         num = str(random.randint(1,100000000))
-        bot.send_photo(chat_id=update.message.chat_id, photo="https://source.unsplash.com/random?random&cat&time="+num)
+        bot.send_photo(chat_id=update.message.chat_id, photo="https://source.unsplash.com/random?"+ msg_list[2] +"&sig="+num)
 
 
     elif msg_list[1] in ["die", "kill"]:
