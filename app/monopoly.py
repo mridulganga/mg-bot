@@ -33,8 +33,8 @@ def mono_handler(bot, update, msg_list):
         if len(msg_list) > 2: username = msg_list[2].replace("@","") 
         u = get_user(chat_id, username)
         if u:
-            wallet = u['wallet']
-            bankbalance = u["bankbalance"]
+            wallet = int(u['wallet'])
+            bankbalance = int(u["bankbalance"])
             update.message.reply_text("Balance Information: \n Wallet: "+ str(wallet) + "\n Bank: " + str(bankbalance) )
         else:
             update.message.reply_text("User doesn't exist.")
