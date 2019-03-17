@@ -223,7 +223,7 @@ def mono_handler(bot, update, msg_list):
         multiplier =  float(random.randint(80,100) /100)
 
         if game==2:  # win
-            money += int(money * multiplier)
+            money = int(money * multiplier)
             add_money(chat_id, username, money)
             update.message.reply_text("Congrats!!\nYou won this round. You got " + str(money))
         else: # lose
@@ -253,13 +253,13 @@ def mono_handler(bot, update, msg_list):
         steal_or_not = random.randint(1,2)
 
         if steal_or_not == 2: # steal successfull
-            how_much = random.randint(1,int(money/2))
+            how_much = random.randint(10,int(money/2))
             deduct_money(chat_id, steal_from, how_much)
             add_money(chat_id, username, how_much)
             update.message.reply_text("You were able to steal " + str(how_much) + " from " + steal_from)
 
         else: # caught
-            how_much = random.randint(1,int(user["wallet"]/2))
+            how_much = random.randint(10,int(user["wallet"]/2))
             deduct_money(chat_id, username, how_much)
             add_money(chat_id, steal_from, how_much)
             update.message.reply_text("Damn! You got caught and paid " + str(how_much) + " to " + steal_from)
