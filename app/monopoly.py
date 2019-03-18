@@ -337,6 +337,10 @@ def mono_handler(bot, update, msg_list):
         remove_item_inventory(chat_id, username, msg_list[2])
         use_handler(bot, update, msg_list)
 
+
+
+
+
     elif msg_list[1] in ["loan"]:
         if len(msg_list) == 2:
             loan = get_loan(chat_id, username)

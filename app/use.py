@@ -1,5 +1,6 @@
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 from app.db import *
+import random
 
 def use_handler(bot, update, msg_list):
     item = msg_list[2]
@@ -20,5 +21,17 @@ def use_handler(bot, update, msg_list):
     elif item == "apple":
         use_message = " was the one to drop his apple on newton's head, the science community gave him 80 bucks for that."
         add_money(chat_id, username, 80)
+    
+    elif item[:7] == "lootbox":
+        loot_class = int(item[7:])
+        if loot_class == 100:   # cost 50
+            min_r, max_r = 10, 100
+        elif loot_class == 500: # cost 200
+            min_r, max_r = 50,1000
+        elif loot_class == 1000: # cost 500
+            min_r, max_r = 200, 2000
+        amount = random.randint(min_r, max_r)
+        user_message = " got " + str(amount) + " from their lootbox."
+        add_money(chat_id, username, amount)
 
     update.message.reply_text(username + use_message)
