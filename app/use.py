@@ -31,7 +31,7 @@ def use_handler(bot, update, msg_list):
         elif loot_class == 1000: # cost 500
             min_r, max_r = 200, 2000
         amount = random.randint(min_r, max_r)
-        user_message = " got " + str(amount) + " from their lootbox."
+        use_message = " got " + str(amount) + " from their lootbox."
         add_money(chat_id, username, amount)
 
     update.message.reply_text(username + use_message)
