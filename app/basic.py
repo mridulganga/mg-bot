@@ -25,7 +25,7 @@ fun_list = ["google","joke", "roast", "mock", "meme", "quote", "xkcd", "avatar",
 
 monopoly_list = ["balance", "beg", "daily", "search", "buy", "sell", "use", "steal", "shop", "market", "store", 
                 "purchase", "inventory", "deposit", "withdraw",
-                "lottery", "gamble", "share", "send", "rich"]
+                "lottery", "gamble", "share", "send", "rich", "loan"]
 
 def start(bot, update):
     update.message.reply_text('Hi!')

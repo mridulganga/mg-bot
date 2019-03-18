@@ -1,11 +1,12 @@
 import pymongo
+import datetime
 
 mongo_creds = open("api/mongo","r")
 client = pymongo.MongoClient(mongo_creds.read())
 db = client.main
 
 def init():
-    for collection in ["chats","users","shop","polls","todos","inventory"]:
+    for collection in ["chats","users","shop","polls","todos","inventory", "loans"]:
         try:
             db.create_collection(collection)
         except pymongo.errors.CollectionInvalid:
@@ -260,5 +261,29 @@ def remove_item_inventory(chat_id, username, item_name):
         else:
             item["quantity"] -=1
             save_item_intentory(item)
+
+
+
+
+
+def get_loan(chat_id, username):
+    return db.loans.find_one({
+        "$and" : [{"chat_id":str(chat_id)},{"username":username}]
+    })
+
+def clear_loan(chat_id, username):
+    db.loans.remove({
+        "$and" : [{"chat_id":str(chat_id)},{"username":username}]
+    })
+
+def take_loan(chat_id, username, amount):
+    import datetime
+    db.loans.insert_one({
+        "amount" : amount,
+        "takenat" : datetime.datetime.today(),
+        "chat_id" : str(chat_id),
+        "username" : username
+    })
+
 
 init()

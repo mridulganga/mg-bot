@@ -336,3 +336,44 @@ def mono_handler(bot, update, msg_list):
     elif msg_list[1] in ["use"]:
         remove_item_inventory(chat_id, username, msg_list[2])
         use_handler(bot, update, msg_list)
+
+    elif msg_list[1] in ["loan"]:
+        if len(msg_list) == 2:
+            loan = get_loan(chat_id, username)
+            if loan:
+                money = loan["amount"]
+                time_period = int(( datetime.datetime.today() - loan["takenat"]).total_seconds() / 3600)
+                interest = int(money*5*time_period/100)
+                update.message.reply_text("Loan :\nAmount: " + str(money) + "\nInterest : " + \
+                            str(interest) + "\n Time Period : " + str(time_period) + "hrs")
+            else:
+                update.message.reply_text("You haven't taken any loans.")
+        elif msg_list[2] in ["return","repay", "pay"]:
+            loan = get_loan(chat_id, username)
+            if loan:
+                money = loan["amount"]
+                # interest every hr
+                time_period = ( datetime.datetime.today() - loan["takenat"]).total_seconds() / 3600
+                repay_amount = int(money + (money*5*time_period)/100)
+                if user["wallet"] >= repay_amount:
+                    deduct_money(chat_id, username, repay_amount)
+                    clear_loan(chat_id, username)
+                    update.message.reply_text("You repaid your loan.")
+                else:
+                    update.message.reply_text("You need " + str(repay_amount) + " in your wallet.")
+            else:
+                update.message.reply_text("You haven't taken any loans.")
+            
+        else:   # get loan
+            money = int(msg_list[2])
+            loan = get_loan(chat_id, username)
+            if not loan:
+                if money > 0 and money <= 50000:
+                    take_loan(chat_id, username, money)
+                    add_money(chat_id, username, money)
+                    update.message.reply_text("You took a loan for " + str(money))    
+                else:
+                    update.message.reply_text("Please enter a value between 1 and 50000.")    
+            else:
+                update.message.reply_text("You already have an outstanding loan.")
+                return
