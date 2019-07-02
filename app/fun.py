@@ -20,7 +20,7 @@ def fun_handler(bot, update, msg_list):
         # contents = requests.get('https://some-random-api.ml/meme').json()
         # url = contents['url']
         # bot.send_photo(chat_id=update.message.chat_id, photo=url)
-        update.message.reply_text("Under Maintenance 3")
+        update.message.reply_text("Under Maintenance")
 
     
     elif msg_list[1] in ["quote"]:
