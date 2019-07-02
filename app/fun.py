@@ -71,7 +71,7 @@ def fun_handler(bot, update, msg_list):
         bot.send_photo(chat_id=update.message.chat_id, photo="https://source.unsplash.com/random?"+ msg_list[2] +"&sig="+num)
 
     elif msg_list[1] in ["wink"]:
-        contents = requests.get("https://geek-jokes.sameerkumar.website/api").text
+        contents = requests.get("https://geek-jokes.sameerkumar.website/api").json()
         bot.send_animation(chat_id=update.message.chat_id, animation=contents["link"])
 
 
