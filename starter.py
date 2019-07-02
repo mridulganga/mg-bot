@@ -7,10 +7,11 @@ process = None
 commit = None
 
 def get_git_head():
-    r = requests.get("https://api.github.com/repos/mridulganga/mg-bot/commits/master")
-    print(r.json())
-    lcommit = r.json()["sha"]
-    return lcommit
+    r = requests.get("https://github.com/mridulganga/mg-bot/commits/master")
+    s = r.text.find("/mridulganga/mg-bot/commit/") + len("/mridulganga/mg-bot/commit/")
+    e = r.text.find("\"",s)
+    txt = r.text[s:e]
+    return(txt)
 
 
 def git_pull():
