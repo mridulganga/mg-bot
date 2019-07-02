@@ -17,9 +17,11 @@ def fun_handler(bot, update, msg_list):
         update.message.reply_text(link)
 
     elif msg_list[1] in ["meme"]:
-        contents = requests.get('https://some-random-api.ml/meme').json()
-        url = contents['url']
-        bot.send_photo(chat_id=update.message.chat_id, photo=url)
+        # contents = requests.get('https://some-random-api.ml/meme').json()
+        # url = contents['url']
+        # bot.send_photo(chat_id=update.message.chat_id, photo=url)
+        update.message.reply_text("Under Maintenance")
+
     
     elif msg_list[1] in ["quote"]:
         import re
