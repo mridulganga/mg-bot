@@ -70,6 +70,10 @@ def fun_handler(bot, update, msg_list):
         num = str(random.randint(1,100000000))
         bot.send_photo(chat_id=update.message.chat_id, photo="https://source.unsplash.com/random?"+ msg_list[2] +"&sig="+num)
 
+    elif msg_list[1] in ["wink"]:
+        contents = requests.get("https://geek-jokes.sameerkumar.website/api").text
+        bot.send_animation(chat_id=update.message.chat_id, animation=contents["link"])
+
 
     elif msg_list[1] in ["die", "kill"]:
         import random
