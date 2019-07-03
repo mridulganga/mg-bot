@@ -26,7 +26,7 @@ def fun_handler(bot, update, msg_list):
         import re
         contents = requests.get('http://quotesondesign.com/wp-json/posts?filter[orderby]=rand&filter[posts_per_page]=1').json()
         text = re.sub('<[^<]+?>', '', contents[0]["content"] + "\n -- " + contents[0]["title"])
-        update.message.reply_text("`"+text+"`")
+        update.message.reply_text("`"+text+"`", parse_mode=telegram.ParseMode.MARKDOWN)
     
     elif msg_list[1] in ["xkcd"]:
         import random
