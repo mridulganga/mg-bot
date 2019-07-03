@@ -35,4 +35,6 @@ def animal_handler(bot, update, msg_list):
         url = get_image_url(animal)
         chat_id = update.message.chat_id
         bot.send_photo(chat_id=chat_id, photo=url)
+
+        
         
