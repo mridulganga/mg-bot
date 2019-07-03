@@ -1,5 +1,6 @@
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 import requests
+import telegram
 
 def fun_handler(bot, update, msg_list):
     if msg_list[1] in ["joke","roast","mock"]:
