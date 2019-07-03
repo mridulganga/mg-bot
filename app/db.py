@@ -251,6 +251,13 @@ def add_item_inventory(chat_id, username, item_name, price):
             item["quantity"] +=1
             save_item_intentory(item)
 
+def get_item_quantity(chat_id, username, item_name):
+    item = get_item_inventory(chat_id, username, item_name)
+    if not item:
+        return 0
+    else:
+        return int(item["quantity"])
+
 def remove_item_inventory(chat_id, username, item_name):
     item = get_item_inventory(chat_id, username, item_name)
     if item:

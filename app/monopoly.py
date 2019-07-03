@@ -334,8 +334,11 @@ def mono_handler(bot, update, msg_list):
     # pls use apple
     # pls use cake @username
     elif msg_list[1] in ["use"]:
-        remove_item_inventory(chat_id, username, msg_list[2])
-        use_handler(bot, update, msg_list)
+        if get_item_quantity(chat_id, username, msg_list[2]) == 0:
+            update.message.reply_text("Item not in inventory")
+        else:
+            remove_item_inventory(chat_id, username, msg_list[2])
+            use_handler(bot, update, msg_list)
 
 
 
