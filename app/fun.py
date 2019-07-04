@@ -88,5 +88,5 @@ def fun_handler(bot, update, msg_list):
         f = open("data/ask_trump_replies")
         replies = f.read().split("\n")
         f.close()
-        reply = repies[random.randint(0,len(replies)-1)]
+        reply = replies[random.randint(0,len(replies)-1)]
         update.message.reply_text("Trump : \n " + reply)
