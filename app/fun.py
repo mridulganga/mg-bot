@@ -1,6 +1,7 @@
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 import requests
 import telegram
+import random
 
 def fun_handler(bot, update, msg_list):
     if msg_list[1] in ["joke","roast","mock"]:
@@ -32,7 +33,6 @@ def fun_handler(bot, update, msg_list):
                 parse_mode=telegram.ParseMode.MARKDOWN)
     
     elif msg_list[1] in ["xkcd"]:
-        import random
         num = str(random.randint(1,2120))
         contents = requests.get('https://xkcd.com/'+num+'/info.0.json').json()
         url = contents["img"]
@@ -43,19 +43,16 @@ def fun_handler(bot, update, msg_list):
         update.message.reply_text(contents)
 
     elif msg_list[1] in ["dice"]:
-        import random
         num = random.randint(1,6)
         update.message.reply_text("Dice : " + str(num))
 
     elif msg_list[1] in ["coin","flip"]:
-        import random
         num = random.randint(1,2)
         txt = "Heads!"
         if num == 2: txt = "Tails!"
         update.message.reply_text(txt)
 
     elif msg_list[1] in ["choose","select"]:
-        import random
         item_list=msg_list[2:]
         num =random.randint(0,len(item_list)-1)
         update.message.reply_text(item_list[num])
@@ -69,7 +66,6 @@ def fun_handler(bot, update, msg_list):
 
 
     elif msg_list[1] in ["unsplash","wall","wallpaper"]:
-        import random
         num = str(random.randint(1,100000000))
         bot.send_photo(chat_id=update.message.chat_id, photo="https://source.unsplash.com/random?"+ msg_list[2] +"&sig="+num)
 
@@ -79,7 +75,7 @@ def fun_handler(bot, update, msg_list):
 
 
     elif msg_list[1] in ["die", "kill"]:
-        import random
+        
         ways_to_die = ["died in the sewer.", "ate a tube of superglue", "sold both the kidneys on the internet.", "Kept a rattle snake as a pet, which bit them.", "got sat on by an elephant.", "fell into elephant shit.", "drank horse piss and said yum.", "disturbed a nest of wasps for no good reason, got stung.", "took their helmet off in outer space.", "ate a two week old unrefridgerated pie.", "set fire to their hair.", "asked milan how to use git and got aws advice.", "held the door, HODOR.", "saw their face in the mirror, and felt a need to make it go away."]
         way_to_die = ways_to_die[random.randint(0,len(ways_to_die)-1)]
         if len(msg_list) == 2:
@@ -87,3 +83,10 @@ def fun_handler(bot, update, msg_list):
         else:
             uname = msg_list[2].replace("@","")
         update.message.reply_text(uname + " " + way_to_die)
+
+    elif msg_list[1] in ["asktrump"]:
+        f = open("data/ask_trump_replies.txt")
+        replies = f.read().split("\n")
+        f.close()
+        reply = repies[random.randint(0,len(replies)-1)]
+        update.message.reply_text("Trump : \n " + reply)
