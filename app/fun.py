@@ -85,7 +85,7 @@ def fun_handler(bot, update, msg_list):
         update.message.reply_text(uname + " " + way_to_die)
 
     elif msg_list[1] in ["asktrump"]:
-        f = open("data/ask_trump_replies.txt")
+        f = open("data/ask_trump_replies")
         replies = f.read().split("\n")
         f.close()
         reply = repies[random.randint(0,len(replies)-1)]
