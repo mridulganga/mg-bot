@@ -84,7 +84,6 @@ def fun_handler(bot, update, msg_list):
             uname = msg_list[2].replace("@","")
         update.message.reply_text(uname + " " + way_to_die)
 
-
     elif msg_list[1] in ["asktrump"]:
         replies = load_replies("ask_trump_replies")
         reply = choose_random(replies)
