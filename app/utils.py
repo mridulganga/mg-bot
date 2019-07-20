@@ -18,3 +18,6 @@ def load_replies(reply_key):
 def choose_random(choose_from_list):
     reply = choose_from_list[random.randint(0,len(choose_from_list)-1)]
     return reply
+
+def get_random_number():
+    return str(random.randint(1,100000000000))
