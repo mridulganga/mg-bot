@@ -3,6 +3,7 @@ import datetime
 from app.use import use_handler
 from app.db import *
 
+from app.utils import *
 
 
 # the username can only be initialised by user
@@ -94,8 +95,8 @@ def mono_handler(bot, update, msg_list):
                 update.message.reply_text("You're begging too much. Stop it!! (wait %d seconds)" % \
                                     (10-int((datetime.datetime.today() - user["last_beg"]).seconds)))
                 return
-        donators = ["Liam", "Noah", "William", "James", "Logan", "Benjamin", "Mason", "Elijah", "Oliver", "Jacob", "Lucas", "Michael", "Alexander", "Ethan", "Daniel", "Matthew", "Aiden", "Henry", "Joseph", "Jackson", "Samuel", "Sebastian", "David", "Carter", "Wyatt", "Jayden", "John", "Owen", "Dylan", "Luke", "Gabriel", "Anthony", "Isaac", "Grayson", "Jack", "Julian", "Levi", "Christopher", "Joshua", "Andrew", "Lincoln", "Mateo", "Ryan", "Jaxon", "Nathan", "Aaron", "Isaiah", "Thomas", "Charles", "Caleb", "Josiah", "Christian", "Hunter", "Eli", "Jonathan", "Connor", "Landon", "Adrian", "Asher", "Cameron", "Leo", "Theodore", "Jeremiah", "Hudson", "Robert", "Easton", "Nolan", "Nicholas", "Ezra", "Colton", "Angel", "Brayden", "Jordan", "Dominic", "Austin", "Ian", "Adam", "Elias", "Jaxson", "Greyson", "Jose", "Ezekiel", "Carson", "Evan", "Maverick", "Bryson", "Jace", "Cooper", "Xavier", "Parker", "Roman", "Jason", "Santiago", "Chase", "Sawyer", "Gavin", "Leonardo", "Kayden", "Ayden", "Jameson", "Kevin", "Bentley", "Zachary", "Everett", "Axel", "Tyler", "Micah", "Vincent", "Weston", "Miles", "Wesley", "Nathaniel", "Harrison", "Brandon", "Cole", "Declan", "Luis", "Braxton", "Damian", "Silas", "Tristan", "Ryder", "Bennett", "George", "Emmett", "Justin", "Kai", "Max", "Diego", "Luca", "Ryker", "Carlos", "Maxwell", "Kingston", "Ivan", "Maddox", "Juan", "Ashton", "Jayce", "Rowan", "Kaiden", "Giovanni", "Eric", "Jesus", "Calvin", "Abel", "King", "Camden", "Amir", "Blake", "Alex", "Brody", "Malachi", "Emmanuel", "Jonah", "Beau", "Jude", "Antonio", "Alan", "Elliott", "Elliot", "Waylon", "Xander", "Timothy", "Victor", "Bryce", "Finn", "Brantley", "Edward", "Abraham", "Patrick", "Grant", "Karter", "Hayden", "Richard", "Miguel", "Joel", "Gael", "Tucker", "Rhett", "Avery", "Steven", "Graham", "Kaleb", "Jasper", "Jesse", "Matteo", "Dean", "Zayden", "Preston", "August", "Oscar", "Jeremy", "Alejandro", "Marcus", "Dawson", "Lorenzo", "Messiah", "Zion", "Maximus"]
-        beg_lines = ["go buy some food", "go gamble it", "go smoke some weed", "go eat some muffins", "go cry in the corner", "go buy some clothes", "go spend it wisely", "go get a life"]
+        donators = choose_random(load_replies("donators"))
+        beg_lines = choose_random(load_replies("beg_lines"))
         
         beg_from = donators[random.randint(0,len(donators)-1)]
         beg_line = beg_lines[random.randint(0,len(beg_lines)-1)]
@@ -138,7 +139,7 @@ def mono_handler(bot, update, msg_list):
         update_user(user)
         add_money(chat_id, username, money)
 
-        search_strings = ["under the sofa", "inside the hidden pocket", "inside the kitchen box", "inside the safe", "inside the boot of your vehicle", "inside the lunchbox", "behind your phone car", "inside your girlfriend's bag", "inside the flush tank", "inside your bong pot", "inside a random person's buttcrack", "inside the dimensions of space", "inside the Washing machine lint drawer", "inside your cat's litter box"]
+        search_strings = choose_random(load_replies("search_lines"))
         search_string = search_strings[random.randint(0,len(search_strings)-1)]
         update.message.reply_text("Congrats you found " + str(money) + " " + search_string)
 
