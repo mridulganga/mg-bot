@@ -4,14 +4,16 @@ import telegram
 import random
 from app.utils import *
 
+
 def fun_handler(bot, update, msg_list):
-    if msg_list[1] in ["joke","roast","mock"]:
+    if msg_list[1] in ["joke", "roast", "mock"]:
         if len(msg_list) > 2:
             fname = msg_list[2]
             lname = msg_list[3] if len(msg_list) > 3 else ""
         else:
             fname, lname = update.message.from_user.first_name, update.message.from_user.last_name
-        contents = requests.get('http://api.icndb.com/jokes/random?firstName='+fname+'&lastName='+lname).json()
+        contents = requests.get(
+            'http://api.icndb.com/jokes/random?firstName='+fname+'&lastName='+lname).json()
         url = contents['value']['joke']
         update.message.reply_text(url)
 
@@ -24,56 +26,69 @@ def fun_handler(bot, update, msg_list):
         url = contents['image']
         bot.send_photo(chat_id=update.message.chat_id, photo=url)
 
-    
     elif msg_list[1] in ["quote"]:
         import re
-        contents = requests.get('http://quotesondesign.com/wp-json/posts?filter[orderby]=rand&filter[posts_per_page]=1').json()
-        text = re.sub('<[^<]+?>', '', contents[0]["content"] + "\n -- " + contents[0]["title"])
-        bot.send_message(chat_id=update.message.chat_id, 
-                text="`"+text+"`", 
-                parse_mode=telegram.ParseMode.MARKDOWN)
-    
+        contents = requests.get(
+            'http://quotesondesign.com/wp-json/posts?filter[orderby]=rand&filter[posts_per_page]=1').json()
+        text = re.sub('<[^<]+?>', '', contents[0]
+                      ["content"] + "\n -- " + contents[0]["title"])
+        bot.send_message(chat_id=update.message.chat_id,
+                         text="`"+text+"`",
+                         parse_mode=telegram.ParseMode.MARKDOWN)
+
     elif msg_list[1] in ["xkcd"]:
-        num = str(random.randint(1,2120))
+        num = str(random.randint(1, 2120))
         contents = requests.get('https://xkcd.com/'+num+'/info.0.json').json()
         url = contents["img"]
         bot.send_photo(chat_id=update.message.chat_id, photo=url)
 
-    elif msg_list[1] in ["geek","geekjoke"]:
-        contents = requests.get("https://geek-jokes.sameerkumar.website/api").text
+    elif msg_list[1] in ["geek", "geekjoke"]:
+        contents = requests.get(
+            "https://geek-jokes.sameerkumar.website/api").text
         update.message.reply_text(contents)
 
     elif msg_list[1] in ["dice"]:
-        num = random.randint(1,6)
+        num = random.randint(1, 6)
         update.message.reply_text("Dice : " + str(num))
 
-    elif msg_list[1] in ["coin","flip"]:
-        num = random.randint(1,2)
+    elif msg_list[1] in ["coin", "flip"]:
+        num = random.randint(1, 2)
         txt = "Heads!"
-        if num == 2: txt = "Tails!"
+        if num == 2:
+            txt = "Tails!"
         update.message.reply_text(txt)
 
-    elif msg_list[1] in ["choose","select"]:
-        item_list=msg_list[2:]
-        num =random.randint(0,len(item_list)-1)
+    elif msg_list[1] in ["choose", "select"]:
+        item_list = msg_list[2:]
+        num = random.randint(0, len(item_list)-1)
         update.message.reply_text(item_list[num])
 
     elif msg_list[1] in ["avatar"]:
         if len(msg_list) > 2:
-            username = msg_list[2].replace("@","")
+            username = msg_list[2].replace("@", "")
         else:
             username = update.message.from_user.username
-        bot.send_photo(chat_id=update.message.chat_id, photo="https://api.adorable.io/avatars/285/"+ username +"@adorable.io.png")
+        bot.send_photo(chat_id=update.message.chat_id,
+                       photo="https://api.adorable.io/avatars/285/" + username + "@adorable.io.png")
 
-
-    elif msg_list[1] in ["unsplash","wall","wallpaper"]:
-        num = str(random.randint(1,100000000))
-        bot.send_photo(chat_id=update.message.chat_id, photo="https://source.unsplash.com/random?"+ msg_list[2] +"&sig="+num)
+    elif msg_list[1] in ["unsplash", "wall", "wallpaper"]:
+        num = str(random.randint(1, 100000000))
+        bot.send_photo(chat_id=update.message.chat_id,
+                       photo="https://source.unsplash.com/random?" + msg_list[2] + "&sig="+num)
 
     elif msg_list[1] in ["wink"]:
         contents = requests.get("https://some-random-api.ml/animu/wink").json()
-        bot.send_animation(chat_id=update.message.chat_id, animation=contents["link"])
+        bot.send_animation(chat_id=update.message.chat_id,
+                           animation=contents["link"])
 
+    elif msg_list[1] in ["belikebill"]:
+        if len(msg_list) == 2:
+            uname = update.message.from_user.username
+        else:
+            uname = msg_list[2].replace("@", "")
+        bot.send_photo(chat_id=update.message.chat_id,
+                       photo="https://belikebill.ga/billgen-API.php?random_number=" + \
+                           get_random_number() + "&default=1&name=" + uname)
 
     elif msg_list[1] in ["die", "kill"]:
         ways_to_die = load_replies("ways_to_die")
@@ -81,7 +96,7 @@ def fun_handler(bot, update, msg_list):
         if len(msg_list) == 2:
             uname = update.message.from_user.username
         else:
-            uname = msg_list[2].replace("@","")
+            uname = msg_list[2].replace("@", "")
         update.message.reply_text(uname + " " + way_to_die)
 
     elif msg_list[1] in ["asktrump"]:
@@ -90,5 +105,6 @@ def fun_handler(bot, update, msg_list):
         update.message.reply_text("Trump : \n " + reply)
 
     elif msg_list[1] in ["dadjoke"]:
-        joke = requests.get("https://icanhazdadjoke.com/", headers={"Accept":"text/plain"}).text
+        joke = requests.get("https://icanhazdadjoke.com/",
+                            headers={"Accept": "text/plain"}).text
         update.message.reply_text(joke)
