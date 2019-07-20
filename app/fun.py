@@ -2,6 +2,7 @@ from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 import requests
 import telegram
 import random
+from app.utils import *
 
 def fun_handler(bot, update, msg_list):
     if msg_list[1] in ["joke","roast","mock"]:
@@ -75,18 +76,16 @@ def fun_handler(bot, update, msg_list):
 
 
     elif msg_list[1] in ["die", "kill"]:
-        
-        ways_to_die = ["died in the sewer.", "ate a tube of superglue", "sold both the kidneys on the internet.", "Kept a rattle snake as a pet, which bit them.", "got sat on by an elephant.", "fell into elephant shit.", "drank horse piss and said yum.", "disturbed a nest of wasps for no good reason, got stung.", "took their helmet off in outer space.", "ate a two week old unrefridgerated pie.", "set fire to their hair.", "asked milan how to use git and got aws advice.", "held the door, HODOR.", "saw their face in the mirror, and felt a need to make it go away."]
-        way_to_die = ways_to_die[random.randint(0,len(ways_to_die)-1)]
+        ways_to_die = load_replies("ways_to_die")
+        way_to_die = choose_random(ways_to_die)
         if len(msg_list) == 2:
             uname = update.message.from_user.username
         else:
             uname = msg_list[2].replace("@","")
         update.message.reply_text(uname + " " + way_to_die)
 
+
     elif msg_list[1] in ["asktrump"]:
-        f = open("data/ask_trump_replies")
-        replies = f.read().split("\n")
-        f.close()
-        reply = replies[random.randint(0,len(replies)-1)]
+        replies = load_replies("ask_trump_replies")
+        reply = choose_random(replies)
         update.message.reply_text("Trump : \n " + reply)
