@@ -81,6 +81,16 @@ def fun_handler(bot, update, msg_list):
         bot.send_animation(chat_id=update.message.chat_id,
                            animation=contents["link"])
 
+
+    elif msg_list[1] in ["yesno"]:
+        contents = requests.get("https://yesno.wtf/api/").json()
+        bot.send_animation(chat_id=update.message.chat_id,
+                           animation=contents["image"])
+
+    elif msg_list[1] in ["advice"]:
+        contents = requests.get("https://api.adviceslip.com/advice").json()
+        update.message.reply_text(contents["slip"]["advice"])
+
     elif msg_list[1] in ["belikebill"]:
         if len(msg_list) == 2:
             uname = update.message.from_user.username
