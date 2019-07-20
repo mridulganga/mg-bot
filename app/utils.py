@@ -1,15 +1,15 @@
 # Home for utility functions
 import random
 
-replies = []
+replies = {}
 
 def load_replies(reply_key):
     global replies
 
-    if replies[reply_key]:
+    if reply_key in replies:
         return  replies[reply_key]
     else:
-        f = open("data/"+reply_key)
+        f = open("data/"+reply_key, "r")
         key_replies = f.read().split("\n")
         f.close()
         replies[reply_key] = key_replies
