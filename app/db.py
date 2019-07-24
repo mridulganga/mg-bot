@@ -44,6 +44,7 @@ def get_users(chat_id):
     return db.users.find({"chat_id":str(chat_id)})
 
 def get_user(chat_id,username):
+    username = username.lower()
     return db.users.find_one({
         "$and":[ {"username":username}, {"chat_id":str(chat_id)}]
     })
