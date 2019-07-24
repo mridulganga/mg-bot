@@ -37,7 +37,7 @@ def main():
     # updater.start_polling()
 
     updater.start_webhook(listen="0.0.0.0",
-                      port=os.environ["PORT"],
+                      port=int(os.environ["PORT"]),
                       url_path=token)
     updater.bot.set_webhook("https://telegram-mg-bot.herokuapp.com/" + token)
 
