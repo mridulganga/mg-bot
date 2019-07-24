@@ -5,7 +5,7 @@ import logging
 debug_logger = logging.getLogger('debug_logger')
 debug_logger.setLevel(logging.DEBUG)
 # create file handler which logs even debug messages
-fh = logging.FileHandler('logs/debug.log')
+# fh = logging.FileHandler('logs/debug.log')
 fh.setLevel(logging.DEBUG)
 # create console handler with a higher log level
 ch = logging.StreamHandler()
@@ -22,7 +22,7 @@ debug_logger.addHandler(ch)
 
 msg_logger = logging.getLogger('msg_logger')
 msg_logger.setLevel(logging.INFO)
-msg_fh = logging.FileHandler('logs/msg.log')
+# msg_fh = logging.FileHandler('logs/msg.log')
 msg_fh.setLevel(logging.INFO)
 msg_formatter = logging.Formatter('%(asctime)s - %(message)s')
 msg_fh.setFormatter(msg_formatter)

@@ -31,6 +31,7 @@ def polloptions(bot,update):
 
 
 def pollcancel(bot,update):
+    chat_id = update.message.chat_id
     end_poll(chat_id)
     update.message.reply_text('Poll cancelled.')
     return ConversationHandler.END

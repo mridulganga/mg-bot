@@ -1,11 +1,10 @@
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 
-# from app.logger import debug_logger
 
 # need this to log erros
 import logging
 import sys
-sys.stderr = open("logs/stderr","a")
+# sys.stderr = open("logs/stderr","a")
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',	
                     level=logging.INFO)	
 logger = logging.getLogger(__name__)
@@ -36,7 +35,14 @@ def main():
 
     dp.add_error_handler(basic.error)
 
-    updater.start_polling()
+    # updater.start_polling()
+
+    updater.start_webhook(listen="0.0.0.0",
+                      port="8443",
+                      url_path=token)
+    updater.bot.set_webhook("https://telegram-mg-bot.herokuapp.com/" + token)
+
+
     updater.idle()
 
 
