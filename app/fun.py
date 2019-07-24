@@ -113,6 +113,11 @@ def fun_handler(bot, update, msg_list):
         replies = load_replies("ask_trump_replies")
         reply = choose_random(replies)
         update.message.reply_text("Trump : \n " + reply)
+    
+    elif msg_list[1] in ["yomama"]:
+        replies = load_replies("yo_mama")
+        reply = choose_random(replies)
+        update.message.reply_text(reply)
 
     elif msg_list[1] in ["dadjoke"]:
         joke = requests.get("https://icanhazdadjoke.com/",
