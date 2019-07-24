@@ -96,11 +96,9 @@ def mono_handler(bot, update, msg_list):
                 update.message.reply_text("You're begging too much. Stop it!! (wait %d seconds)" % \
                                     (10-int((datetime.datetime.today() - user["last_beg"]).seconds)))
                 return
-        donators = choose_random(load_replies("donators"))
-        beg_lines = choose_random(load_replies("beg_lines"))
         
-        beg_from = donators[random.randint(0,len(donators)-1)]
-        beg_line = beg_lines[random.randint(0,len(beg_lines)-1)]
+        beg_from = choose_random(load_replies("donators"))
+        beg_line = choose_random(load_replies("beg_lines"))
         
         beg_amount = random.randint(10,100)
         user["last_beg"] = datetime.datetime.today()
@@ -140,8 +138,7 @@ def mono_handler(bot, update, msg_list):
         update_user(user)
         add_money(chat_id, username, money)
 
-        search_strings = choose_random(load_replies("search_lines"))
-        search_string = search_strings[random.randint(0,len(search_strings)-1)]
+        search_string = choose_random(load_replies("search_lines"))
         update.message.reply_text("Congrats you found " + str(money) + " " + search_string)
 
 
