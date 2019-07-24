@@ -1,8 +1,11 @@
 import pymongo
 import datetime
+import os
 
-mongo_creds = open("api/mongo","r")
-client = pymongo.MongoClient(mongo_creds.read())
+# mongo_creds = open("api/mongo","r")
+# client = pymongo.MongoClient(mongo_creds.read())
+
+client = pymongo.MongoClient(os.environ["MONGO"])
 db = client.main
 
 def init():

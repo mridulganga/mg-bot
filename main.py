@@ -3,8 +3,8 @@ from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 
 # need this to log erros
 import logging
-import sys
-# sys.stderr = open("logs/stderr","a")
+import os
+
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',	
                     level=logging.INFO)	
 logger = logging.getLogger(__name__)
@@ -19,10 +19,9 @@ updater = None
 
 def main():
     global updater
-    f = open('api/token','r')
-    token = f.read()
+
+    token = os.environ["TELEGRAM"]
     updater = Updater(token)
-    f.close()
 
     dp = updater.dispatcher
     
