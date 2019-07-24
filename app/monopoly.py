@@ -1,4 +1,5 @@
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+import telegram
 import datetime
 from app.use import use_handler
 from app.db import *
@@ -323,13 +324,18 @@ def mono_handler(bot, update, msg_list):
 
     # pls inventory
     # View the Items in the Shop
-    elif msg_list[1] in ["inventory"]:
+    elif msg_list[1] in ["inventory"]: 
         inventory = get_inventory(chat_id, username)
         if inventory:
-            items_str = "Inventory Items :\n"
+            items_str = "*Inventory Items for "+ username +" :*`\n"
             for item in inventory:
-                items_str += item["name"] + "("+ str(item["quantity"]) +") = " + str(item["price"])
-            update.message.reply_text(items_str)
+                items_str += item["name"] + "("+ str(item["quantity"]) +") = " + str(item["price"]) + "\n"
+            items_str +="`"
+            # update.message.reply_text(items_str)
+
+            bot.send_message(chat_id=chat_id, 
+                text=items_str, 
+                parse_mode=telegram.ParseMode.MARKDOWN)
     
 
     # pls use apple
