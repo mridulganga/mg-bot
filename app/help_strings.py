@@ -26,7 +26,7 @@ help_dict = {
 
     ("todo",) : "*Todo Usage*:\n`pls todo           -list todos\npls todo item      -add todo \npls todo remove 2  -remove 2nd item\npls todo remove    -remove everything\n`",
 
-    ("fun",) : "*Fun Commands*:\n`joke, google, meme, quote, xkcd, geek, coin, dice, avatar, unsplash, wink, asktrump`",
+    ("fun",) : "*Fun Commands*:\n`joke, google, meme, quote, xkcd, geek, coin, dice, avatar, unsplash, wink, asktrump, wink, asktrump, dadjoke, belikebill, yesno, advice, yomama`",
     ("choose",) : "*Choose*:\n`pls choose item1 item2 item3`",
     ("animals",) : "*Animals*:\n`dog, cat, panda, fox, redpanda, pika`\nUsage :\n`pls meow\npls bork`"
 }
