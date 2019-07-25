@@ -353,7 +353,7 @@ def mono_handler(bot, update, msg_list):
     
 
     # pls use apple
-    # pls use cake @username
+    # pls use cake 
     elif msg_list[1] in ["use"]:
         if get_item_quantity(chat_id, username, msg_list[2]) == 0:
             update.message.reply_text("Item not in inventory")
@@ -379,13 +379,14 @@ def mono_handler(bot, update, msg_list):
                             str(interest) + "\n Time Period : " + str(time_period) + "hrs")
             else:
                 update.message.reply_text("You haven't taken any loans.")
+        
         elif msg_list[2] in ["return","repay", "pay"]: 
             loan = get_loan(chat_id, username)
             if loan:
                 money = loan["amount"]
                 # interest every hr
-                time_period = ( datetime.datetime.today() - loan["takenat"]).total_seconds() / 3600
-                repay_amount = int(money + (money*5*time_period)/100)
+                time_period = int(( datetime.datetime.today() - loan["takenat"]).total_seconds() / 3600)
+                repay_amount = int(money + int((money*5*time_period)/100))
                 if user["wallet"] >= repay_amount:
                     deduct_money(chat_id, username, repay_amount)
                     clear_loan(chat_id, username)

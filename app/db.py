@@ -250,7 +250,7 @@ def add_item_inventory(chat_id, username, item_name, price, expiry=None):
                 "chat_id" : str(chat_id),
                 "username" : username
             }
-            if expiry: item["expiry"] = datetime.datetime.today() + datetime.timedelta(seconds=expiry) 
+            if expiry: item["expiry"] = datetime.datetime.today() + datetime.timedelta(days=expiry) 
             db.inventory.insert(item)
         else:
             item["quantity"] +=1
@@ -271,6 +271,7 @@ def item_has_expired(chat_id, username, item_name):
             return True
         else:
             return False
+    return False
 
 def remove_item_inventory(chat_id, username, item_name):
     item = get_item_inventory(chat_id, username, item_name)
