@@ -175,9 +175,6 @@ def mono_handler(bot, update, msg_list):
                 else:
                     update.message.reply_text("You dont even have enough money to buy a lottery ticket.")
                 buy_lottery(chat_id, username)
-                
-                
-                else:
                     
                 
         elif msg_list[2] in ["view"]:
