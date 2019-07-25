@@ -191,6 +191,7 @@ def mono_handler(bot, update, msg_list):
             money = int(msg_list[3])
         except:
             update.message.reply_text("Please enter a valid numeric amount.")
+            return
 
         if user["wallet"] > money and money > 0:
             deduct_money(chat_id, username, wallet=money)
@@ -359,7 +360,7 @@ def mono_handler(bot, update, msg_list):
                             str(interest) + "\n Time Period : " + str(time_period) + "hrs")
             else:
                 update.message.reply_text("You haven't taken any loans.")
-        elif msg_list[2] in ["return","repay", "pay"]:
+        elif msg_list[2] in ["return","repay", "pay"]: 
             loan = get_loan(chat_id, username)
             if loan:
                 money = loan["amount"]
