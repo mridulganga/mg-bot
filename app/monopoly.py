@@ -172,9 +172,10 @@ def mono_handler(bot, update, msg_list):
             else:   # participate in lottery
                 if deduct_money_wrapper(chat_id, username, money=100):
                     update.message.reply_text("You have successfully participated in the lottery.")
+                    buy_lottery(chat_id, username)
                 else:
                     update.message.reply_text("You dont even have enough money to buy a lottery ticket.")
-                buy_lottery(chat_id, username)
+                
                     
                 
         elif msg_list[2] in ["view"]:
