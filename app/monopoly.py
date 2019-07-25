@@ -304,7 +304,7 @@ def mono_handler(bot, update, msg_list):
             # limited items
             if "limit" in shop_item:
                 if shop_item["limit"] <= get_item_quantity(chat_id, username, item_name):
-                    update.message.reply_text("You can only buy " + shop_item["limit"] + " " + item_name)
+                    update.message.reply_text("You can only buy " + str(shop_item["limit"]) + " " + item_name)
                     return
             if shop_item["price"] <= user["wallet"]:
                 expiry = shop_item["expiry"] if "expiry" in shop_item else None
