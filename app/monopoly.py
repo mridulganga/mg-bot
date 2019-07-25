@@ -337,12 +337,11 @@ def mono_handler(bot, update, msg_list):
         if inventory:
             items_str = "*Inventory Items for "+ username +" :*`\n"
             for item in inventory:
-
-                if "expiry" in item:
-                    if datetime.datetime.today() > item["expiry"]:
-                        remove_item_inventory(chat_id, username, item["name"])
-                        update.message.reply_text(item["name"] + " has expired.")
-                        continue
+                
+                if item_has_expired(chat_id, username, item_name):
+                    remove_item_inventory(chat_id, username, item["name"])
+                    update.message.reply_text(item["name"] + " has expired.")
+                    continue
                 
                 items_str += item["name"] + "("+ str(item["quantity"]) +") = " + str(item["price"]) + "\n"
             items_str +="`"
@@ -360,7 +359,8 @@ def mono_handler(bot, update, msg_list):
             update.message.reply_text("Item not in inventory")
         else:
             remove_item_inventory(chat_id, username, msg_list[2])
-            use_handler(bot, update, msg_list)
+            if not item_has_expired(chat_id, username, msg_list[2]):
+                use_handler(bot, update, msg_list)
 
 
 

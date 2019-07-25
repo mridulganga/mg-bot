@@ -263,6 +263,15 @@ def get_item_quantity(chat_id, username, item_name):
     else:
         return int(item["quantity"])
 
+def item_has_expired(chat_id, username, item_name):
+    item = get_item_inventory(chat_id, username, item_name)
+    if not item: return False
+    if "expiry" in item:
+        if item["expiry"] < datetime.datetime.today():
+            return True
+        else:
+            return False
+
 def remove_item_inventory(chat_id, username, item_name):
     item = get_item_inventory(chat_id, username, item_name)
     if item:
