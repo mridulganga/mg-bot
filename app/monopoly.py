@@ -231,7 +231,7 @@ def mono_handler(bot, update, msg_list):
                 return
         else:
             money = int(msg_list[2])
-            if money < 2 or money > user["wallet"]:
+            if money < 1 or money > user["wallet"]:
                 update.message.reply_text("You dont have enough money to gamble.")
                 return
 
