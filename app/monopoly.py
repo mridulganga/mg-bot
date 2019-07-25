@@ -11,6 +11,22 @@ from app.utils import *
 def check_mono_initialized(chat_id,username):
     create_user(chat_id, username)
 
+def deduct_money_wrapper(chat_id,username,money):
+    if money<0: return False
+    user = get_user(chat_id, username)
+    if has_active_debitcard(chat_id, username):
+        if user["wallet"] >= money:
+            deduct_money(chat_id, username, wallet = money)
+        elif user["wallet"] + user["bank"] >= money:
+            deduct_money(chat_id, username, wallet = user["wallet"], bank=money-user["wallet"])
+        else:
+            return False
+    else:   # doesnt have debit card
+        if user["wallet"] >= money:
+            deduct_money(chat_id, username, wallet = money)
+        else:
+            return False
+
 
 def mono_handler(bot, update, msg_list):
     chat_id = update.message.chat_id
@@ -154,12 +170,15 @@ def mono_handler(bot, update, msg_list):
             if username in lottery_users:   # participated already
                 update.message.reply_text("You have already participated. Use \npls lottery results")
             else:   # participate in lottery
-                if user["wallet"] >= 10:
-                    deduct_money(chat_id, username, wallet = 10)
-                    buy_lottery(chat_id, username)
+                if deduct_money_wrapper(chat_id, username, money=100):
                     update.message.reply_text("You have successfully participated in the lottery.")
                 else:
                     update.message.reply_text("You dont even have enough money to buy a lottery ticket.")
+                buy_lottery(chat_id, username)
+                
+                
+                else:
+                    
                 
         elif msg_list[2] in ["view"]:
             if len(lottery_users) > 0:
@@ -193,8 +212,7 @@ def mono_handler(bot, update, msg_list):
             update.message.reply_text("Please enter a valid numeric amount.")
             return
 
-        if user["wallet"] >= money and money > 0:
-            deduct_money(chat_id, username, wallet=money)
+        if deduct_money_wrapper(chat_id, username, money):
             u = get_user(chat_id, to_user)
             add_money(chat_id, to_user, money)
             update.message.reply_text("Money has been sent.")
@@ -306,11 +324,12 @@ def mono_handler(bot, update, msg_list):
                 if shop_item["limit"] <= get_item_quantity(chat_id, username, item_name):
                     update.message.reply_text("You can only buy " + str(shop_item["limit"]) + " " + item_name)
                     return
-            if shop_item["price"] <= user["wallet"]:
+
+            if deduct_money_wrapper(chat_id, username, shop_item["price"]):
                 expiry = shop_item["expiry"] if "expiry" in shop_item else None
-                deduct_money(chat_id, username, shop_item["price"])
+                # deduct_money(chat_id, username, shop_item["price"])
                 add_item_inventory(chat_id, username, item_name, shop_item["price"], expiry=expiry)
-                update.message.reply_text("Item " + item_name + " has been purchased")
+                update.message.reply_text("Item " + item_name + " has been purchased")                
             else:
                 update.message.reply_text("You dont have enough money.")
         else:
@@ -387,12 +406,11 @@ def mono_handler(bot, update, msg_list):
                 # interest every hr
                 time_period = int(( datetime.datetime.today() - loan["takenat"]).total_seconds() / 3600)
                 repay_amount = int(money + int((money*5*time_period)/100))
-                if user["wallet"] >= repay_amount:
-                    deduct_money(chat_id, username, repay_amount)
+                if deduct_money_wrapper(chat_id, username, repay_amount):
                     clear_loan(chat_id, username)
                     update.message.reply_text("You repaid your loan.")
                 else:
-                    update.message.reply_text("You need " + str(repay_amount) + " in your wallet.")
+                    update.message.reply_text("You need " + str(repay_amount) + " in your wallet/bank.")
             else:
                 update.message.reply_text("You haven't taken any loans.")
             

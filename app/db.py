@@ -273,6 +273,14 @@ def item_has_expired(chat_id, username, item_name):
             return False
     return False
 
+def has_active_debitcard(chat_id, username):
+    if get_item_inventory(chat_id, username, "debitcard"):
+        if item_has_expired(chat_id, username, "debitcard"):
+            remove_item_inventory(chat_id, username, "debitcard")
+            return False
+        else:
+            return True
+
 def remove_item_inventory(chat_id, username, item_name):
     item = get_item_inventory(chat_id, username, item_name)
     if item:
