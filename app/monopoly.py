@@ -17,7 +17,7 @@ def deduct_money_wrapper(chat_id,username,money):
     if has_active_debitcard(chat_id, username):
         if user["wallet"] >= money:
             deduct_money(chat_id, username, wallet = money)
-        elif user["wallet"] + user["bank"] >= money:
+        elif user["wallet"] + user["bankbalance"] >= money:
             deduct_money(chat_id, username, wallet = user["wallet"], bank=money-user["wallet"])
         else:
             return False
