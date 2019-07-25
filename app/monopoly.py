@@ -26,6 +26,7 @@ def deduct_money_wrapper(chat_id,username,money):
             deduct_money(chat_id, username, wallet = money)
         else:
             return False
+    return True
 
 
 def mono_handler(bot, update, msg_list):
