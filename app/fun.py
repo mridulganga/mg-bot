@@ -12,6 +12,8 @@ def fun_handler(bot, update, msg_list):
             lname = msg_list[3] if len(msg_list) > 3 else ""
         else:
             fname, lname = update.message.from_user.first_name, update.message.from_user.last_name
+        if fname == None: fname = ""
+        if lname == None: lname = ""
         contents = requests.get(
             'http://api.icndb.com/jokes/random?firstName='+fname+'&lastName='+lname).json()
         url = contents['value']['joke']
