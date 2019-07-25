@@ -18,7 +18,7 @@ def deduct_money_wrapper(chat_id,username,money):
         if user["wallet"] >= money:
             deduct_money(chat_id, username, wallet = money)
         elif user["wallet"] + user["bankbalance"] >= money + int(money*0.05):
-            money += int(money*0.05)
+            money += int(money*0.005)
             deduct_money(chat_id, username, wallet = user["wallet"], bank=money-user["wallet"])
         else:
             return False
