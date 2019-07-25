@@ -301,10 +301,16 @@ def mono_handler(bot, update, msg_list):
         item_name = msg_list[2]
         shop_item = get_shop_item(item_name)
         if shop_item:
+            # limited items
+            if "limit" in shop_item:
+                if shop_item["limit"] <= get_item_quantity(chat_id, username, item_name):
+                    update.message.reply_text("You can only buy " + shop_item["limit"] + " " + item_name)
+                    return
             if shop_item["price"] <= user["wallet"]:
-                add_item_inventory(chat_id, username, item_name, shop_item["price"])
-                update.message.reply_text("Item " + item_name + " has been purchased")
+                expiry = shop_item["expiry"] if "expiry" in shop_item else None
                 deduct_money(chat_id, username, shop_item["price"])
+                add_item_inventory(chat_id, username, item_name, shop_item["price"], expiry=expiry)
+                update.message.reply_text("Item " + item_name + " has been purchased")
             else:
                 update.message.reply_text("You dont have enough money.")
         else:
@@ -331,6 +337,13 @@ def mono_handler(bot, update, msg_list):
         if inventory:
             items_str = "*Inventory Items for "+ username +" :*`\n"
             for item in inventory:
+
+                if "expiry" in item:
+                    if datetime.datetime.today() > item["expiry"]:
+                        remove_item_inventory(chat_id, username, item["name"])
+                        update.message.reply_text(item["name"] + " has expired.")
+                        continue
+                
                 items_str += item["name"] + "("+ str(item["quantity"]) +") = " + str(item["price"]) + "\n"
             items_str +="`"
             # update.message.reply_text(items_str)

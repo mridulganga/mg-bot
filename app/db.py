@@ -238,18 +238,20 @@ def get_item_inventory(chat_id, username, item_name):
 def save_item_intentory(item):
     db.inventory.find_one_and_replace({"_id":item["_id"]},item)
 
-def add_item_inventory(chat_id, username, item_name, price):
+def add_item_inventory(chat_id, username, item_name, price, expiry=None):
     inventory = get_inventory(chat_id, username)
     if inventory:
         item = get_item_inventory(chat_id, username, item_name)
         if not item:
-            db.inventory.insert({
+            item = {
                 "name" : item_name,
                 "quantity" : 1,
                 "price" : price,
                 "chat_id" : str(chat_id),
                 "username" : username
-            })
+            }
+            if expiry: item["expiry"] = datetime.datetime.today() + datetime.timedelta(seconds=expiry) 
+            db.inventory.insert(item)
         else:
             item["quantity"] +=1
             save_item_intentory(item)
