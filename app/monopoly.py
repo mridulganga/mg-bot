@@ -193,7 +193,7 @@ def mono_handler(bot, update, msg_list):
             update.message.reply_text("Please enter a valid numeric amount.")
             return
 
-        if user["wallet"] > money and money > 0:
+        if user["wallet"] >= money and money > 0:
             deduct_money(chat_id, username, wallet=money)
             u = get_user(chat_id, to_user)
             add_money(chat_id, to_user, money)
