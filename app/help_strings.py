@@ -16,7 +16,7 @@ help_dict = {
     ("share",)  :       "`pls share @username 100`   \nShare money to @user",
     ("gamble",)  :      "`pls gamble all\npls gamble 100`    \nGamble money (win/lose)",
     ("lottery",)  :     "`pls lottery view\npls lottery buy\npls lottery results`    \nBuy lottery tickets and see results",
-    ("loan",)  :        "Loan Help*:\n`pls loan        -view loan status\npls loan 5000   -get loan of 5000\npls loan pay    -repay loan`",
+    ("loan",)  :        "*Loan Help*:\n`pls loan        -view loan status\npls loan 5000   -get loan of 5000\npls loan pay    -repay loan`",
     ("lootbox",)  :     "`pls buy lootbox100\npls use lootbox100`    \nbuy lootboxes and use them to get rewards",
     ("rich",)  :        "`pls rich`  \nShow list of rich people in the group",
 
