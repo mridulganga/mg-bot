@@ -284,10 +284,14 @@ def mono_handler(bot, update, msg_list):
     # pls shop
     elif msg_list[1] in ["shop", "market", "store"]:
         shop = get_shop_items()
-        item_str = "Shop Items :\n"
+        item_str = "*Shop Items :*`\n" 
         for item in shop:
             item_str += item["name"] + " = " + str(item["price"]) + "\n"
-        update.message.reply_text(item_str)
+        item_str += "`"
+        # update.message.reply_text(item_str)
+        bot.send_message(chat_id=chat_id, 
+        text=item_str, 
+        parse_mode=telegram.ParseMode.MARKDOWN)
 
 
 
