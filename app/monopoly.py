@@ -337,8 +337,8 @@ def mono_handler(bot, update, msg_list):
         if inventory:
             items_str = "*Inventory Items for "+ username +" :*`\n"
             for item in inventory:
-                
-                if item_has_expired(chat_id, username, item_name):
+
+                if item_has_expired(chat_id, username, item["name"]):
                     remove_item_inventory(chat_id, username, item["name"])
                     update.message.reply_text(item["name"] + " has expired.")
                     continue
@@ -358,9 +358,11 @@ def mono_handler(bot, update, msg_list):
         if get_item_quantity(chat_id, username, msg_list[2]) == 0:
             update.message.reply_text("Item not in inventory")
         else:
-            remove_item_inventory(chat_id, username, msg_list[2])
-            if not item_has_expired(chat_id, username, msg_list[2]):
+            if item_has_expired(chat_id, username, msg_list[2])==False:
                 use_handler(bot, update, msg_list)
+            else:
+                update.message.reply_text(msg_list[2] + " has expired.")
+            remove_item_inventory(chat_id, username, msg_list[2])
 
 
 
