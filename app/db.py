@@ -64,7 +64,6 @@ def create_user(chat_id, username):
             "wallet" : 0,
             "bankbalance" : 0,
             "chat_id" : str(chat_id),
-            "inventory" : None
         })
     user = get_user(chat_id,username)
     return user
