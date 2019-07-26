@@ -20,6 +20,7 @@ help_dict = {
     ("loan",)  :        "*Loan Help*:\n`pls loan        -view loan status\npls loan 5000   -get loan of 5000\npls loan pay    -repay loan`",
     ("lootbox",)  :     "`pls buy lootbox100\npls use lootbox100`    \nbuy lootboxes and use them to get rewards",
     ("rich",)  :        "`pls rich`  \nShow list of rich people in the group",
+    ("debitcard",) : "*Debit Card Help*\n- Buy a debit card at the shop\n`pls buy beditcard`\n- Debit card expires in 5 \ndays.- Debit card transactions have 0.005% tax\n- If you posess a debit card you may \n    - Shop from bank balance\n    - Share money from bank directly",
 
 
     ("poll",) : "*Poll Usage*:\n`pls poll      -create new poll\npls vote 2    -vote for 2nd option\npls vote      -show poll votes\npls vote end  -end poll and show results`",
