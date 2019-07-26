@@ -9,7 +9,7 @@ client = pymongo.MongoClient(os.environ["MONGO"])
 db = client.main
 
 def init():
-    for collection in ["chats","users","shop","polls","todos","inventory", "loans"]:
+    for collection in ["chats","users","shop","polls","todos","inventory", "loans", "helps"]:
         try:
             db.create_collection(collection)
         except pymongo.errors.CollectionInvalid:
@@ -314,6 +314,12 @@ def take_loan(chat_id, username, amount):
         "chat_id" : str(chat_id),
         "username" : username
     })
+
+
+def get_help(command):
+    h = db.helps.find_one({"keywords":command})
+    if h: return h
+    else: return None
 
 
 init()
