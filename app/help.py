@@ -1,3 +1,4 @@
+import telegram
 
 help_dict = {
     # monopoly help
@@ -37,3 +38,17 @@ def get_help(query):
         if i in x:
             return "*HELP*:\n" + help_dict[x]
     return "Cant help you with that, sorry!"
+
+
+def help_handler(bot, update, msg_list):
+    if len(msg_list) > 2:
+        help_str = get_help(msg_list[2])
+        # update.message.reply_text("Help : \n" + help_str)
+        bot.send_message(chat_id=update.message.chat_id, 
+                text=help_str, 
+                parse_mode=telegram.ParseMode.MARKDOWN)
+    else:
+        help_str = "*Main Sections*:\n`Fun\nChoose\nAnimals\nTodo\nPoll\nMonopoly\n\n`*Use*:\n`pls help <command>`"
+        bot.send_message(chat_id=update.message.chat_id, 
+                text=help_str, 
+                parse_mode=telegram.ParseMode.MARKDOWN)

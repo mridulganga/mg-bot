@@ -13,7 +13,7 @@ from app.animals import animal_handler
 from app.fun import fun_handler
 from app.poll import poll_extras_handler
 from app.monopoly import mono_handler
-from app.help_strings import get_help
+from app.help import help_handler
 # import logging
 
 animal_list = ["dog","bark","bork","cat","meow","pussy","panda","redpanda",
@@ -32,20 +32,6 @@ def start(bot, update):
     update.message.reply_text('Hi!')
 
 
-def help(bot, update, msg_list):
-    if len(msg_list) > 2:
-        help_str = get_help(msg_list[2])
-        # update.message.reply_text("Help : \n" + help_str)
-        bot.send_message(chat_id=update.message.chat_id, 
-                text=help_str, 
-                parse_mode=telegram.ParseMode.MARKDOWN)
-    else:
-        help_str = "*Main Sections*:\n`Fun\nChoose\nAnimals\nTodo\nPoll\nMonopoly\n\n`*Use*:\n`pls help command`"
-
-        bot.send_message(chat_id=update.message.chat_id, 
-                text=help_str, 
-                parse_mode=telegram.ParseMode.MARKDOWN)
-
 def error(bot, update, msg_list):
     debug_logger.debug(str(update.message.chat_id) + " - " + update.message.from_user.username + " || " + str(msg_list))
 
@@ -56,12 +42,13 @@ def msg_parser(bot, update):
     if msg_list[0] in ["mg","pls", "kini"]:
 
         if len(msg_list) == 1:
-            return
+            update.message.reply_text("You didn't write any command. \nTry 'pls help'")
 
         if msg_list[1] in animal_list:
             animal_handler(bot, update, msg_list)
 
         elif msg_list[1] in ["games","game"]:
+
             pass
 
         elif msg_list[1] in monopoly_list:
@@ -86,7 +73,7 @@ def msg_parser(bot, update):
             poll_extras_handler(bot, update, msg_list)
 
         elif msg_list[1] == "help":
-            help(bot,update,msg_list)
+            help_handler(bot,update,msg_list)
         else:
             debug_logger.debug(str(msg_list))
             #help(bot,update,msg_list)
