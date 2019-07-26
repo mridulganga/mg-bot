@@ -26,7 +26,7 @@ def main():
     dp = updater.dispatcher
     
     dp.add_handler(CommandHandler("start", basic.start))
-    dp.add_handler(CommandHandler("help", basic.help))
+    dp.add_handler(CommandHandler("help", basic.help_handler))
 
     dp.add_handler(poll_handler)
     dp.add_handler(MessageHandler(Filters.text, basic.msg_parser))
