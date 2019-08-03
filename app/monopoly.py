@@ -1,6 +1,7 @@
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 import telegram
 import datetime
+import random
 from app.use import use_handler
 from app.db import *
 
@@ -108,7 +109,6 @@ def mono_handler(bot, update, msg_list):
     # pls beg
     # beg timer = 10s
     elif msg_list[1] in ["beg"]:
-        import random
         if "last_beg" in user:
             if not (datetime.datetime.today() - user["last_beg"]).seconds > 10:
                 update.message.reply_text("You're begging too much. Stop it!! (wait %d seconds)" % \
@@ -135,7 +135,6 @@ def mono_handler(bot, update, msg_list):
                 time_left = str(diff_time.seconds//3600) + "hrs and " + str((diff_time.seconds//60)%60) + "mins"
                 update.message.reply_text("You have already gotten your share for the day, try again after " + time_left)
                 return
-        import random
         money = random.randint(200,300)
         user["last_daily"] = datetime.datetime.today()
         update_user(user)
@@ -150,7 +149,6 @@ def mono_handler(bot, update, msg_list):
             if (datetime.datetime.today() - user["last_search"]).seconds < 10:
                 update.message.reply_text("You need to wait "+ str(10-(datetime.datetime.today() - user["last_search"]).seconds) +"s to continue searching.")
                 return
-        import random
         money = random.randint(20,100)
         user["last_search"] = datetime.datetime.today()
         update_user(user)
@@ -189,7 +187,6 @@ def mono_handler(bot, update, msg_list):
         elif msg_list[2] in ["result","results"]:    
             num = len(lottery_users)
             money = 10 * num * num
-            import random 
             winner = lottery_users[random.randint(0, len(lottery_users)-1)] # random select
             # u = get_user(chat_id, winner)
             add_money(chat_id, winner, wallet=money)
@@ -236,11 +233,11 @@ def mono_handler(bot, update, msg_list):
                 update.message.reply_text("You dont have enough money to gamble.")
                 return
 
-        import random
-        game = random.randint(1,2)
+        
+        game = random.choice([True, False])
         multiplier =  float(random.randint(80,100) /100)
 
-        if game==2:  # win
+        if game:  # win
             money = int(money * multiplier)
             add_money(chat_id, username, money)
             update.message.reply_text("Congrats!!\nYou won this round. You got " + str(money))
@@ -267,7 +264,6 @@ def mono_handler(bot, update, msg_list):
             return
 
         # success or got caught
-        import random
         steal_or_not = random.randint(1,2)
 
         if steal_or_not == 2: # steal successfull
