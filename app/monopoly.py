@@ -393,7 +393,7 @@ def mono_handler(bot, update, msg_list):
             if loan:
                 money = loan["amount"]
                 time_period = int(( datetime.datetime.today() - loan["takenat"]).total_seconds() / 3600)
-                interest = int(money*5*time_period/100)
+                interest = int(money*time_period*0.0005)
                 update.message.reply_text("Loan :\nAmount: " + str(money) + "\nInterest : " + \
                             str(interest) + "\n Time Period : " + str(time_period) + "hrs")
             else:
@@ -402,13 +402,21 @@ def mono_handler(bot, update, msg_list):
         elif msg_list[2] in ["return","repay", "pay"]: 
             loan = get_loan(chat_id, username)
             if loan:
+               
                 money = loan["amount"]
                 # interest every hr
                 time_period = int(( datetime.datetime.today() - loan["takenat"]).total_seconds() / 3600)
-                repay_amount = int(money + int((money*5*time_period)/100))
+                total_amount = int(money + int((money*time_period)*0.0005))
+                repay_amount = total_amount
+                if len(msg_list) == 4:
+                    repay_amount = int(msg_list[3])
+                
                 if deduct_money_wrapper(chat_id, username, repay_amount):
-                    clear_loan(chat_id, username)
-                    update.message.reply_text("You repaid your loan.")
+                    revise_loan(chat_id, username, total_amount - repay_amount)
+                    if repay_amount == total_amount:
+                        update.message.reply_text("You cleared your loan.")
+                    else:
+                        update.message.reply_text("You paid part of your loan.")
                 else:
                     update.message.reply_text("You need " + str(repay_amount) + " in your wallet/bank.")
             else:

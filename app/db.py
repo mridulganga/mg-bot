@@ -306,6 +306,12 @@ def clear_loan(chat_id, username):
         "$and" : [{"chat_id":str(chat_id)},{"username":username}]
     })
 
+
+def revise_loan(chat_id, username, new_amount):
+    clear_loan(chat_id, username)
+    if new_amount>0:
+        take_loan(chat_id, username, new_amount)
+
 def take_loan(chat_id, username, amount):
     import datetime
     db.loans.insert_one({
