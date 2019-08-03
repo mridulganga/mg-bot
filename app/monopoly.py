@@ -426,12 +426,12 @@ def mono_handler(bot, update, msg_list):
             money = int(msg_list[2])
             loan = get_loan(chat_id, username)
             if not loan:
-                if money > 0 and money <= 50000:
+                if money > 0 and money <= 100000:
                     take_loan(chat_id, username, money)
                     add_money(chat_id, username, money)
                     update.message.reply_text("You took a loan for " + str(money))    
                 else:
-                    update.message.reply_text("Please enter a value between 1 and 50000.")    
+                    update.message.reply_text("Please enter a value between 1 and 100000.")    
             else:
                 update.message.reply_text("You already have an outstanding loan.")
                 return
