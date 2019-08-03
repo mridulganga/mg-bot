@@ -234,7 +234,7 @@ def mono_handler(bot, update, msg_list):
                 return
 
         
-        game = random.choice([True, False], p = [0.6,0.4])
+        game = random.choice([True, True, True, False, False])
         multiplier =  float(random.randint(80,100) /100)
 
         if game:  # win
