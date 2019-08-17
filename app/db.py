@@ -321,6 +321,24 @@ def take_loan(chat_id, username, amount):
         "username" : username
     })
 
+def rob_bank(chat_id, username, to_user):
+    db.bankrob.insert_one({
+        "rob":to_user,
+        "by_user": username
+    })
+
+def get_bank_robbers(chat_id, username):
+    items =  db.inventory.find({
+        "rob" : username}
+    })
+    l_items = []
+    for item in items:
+        l_items.append(item)
+    return l_items
+
+def rob_finish(chat_id, username):
+    db.bankrob.remove({"rob":username})
+
 
 def get_help(command):
     h = db.helps.find_one({"keywords":command})
