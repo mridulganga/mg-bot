@@ -465,7 +465,7 @@ def mono_handler(bot, update, msg_list):
             return
 
         # username
-        to_user = msg_list[2].replace("@","")
+        to_user = (msg_list[2].replace("@","")).lower()
 
         robbers = get_bank_robbers(chat_id, to_user)
         if robbers:
@@ -475,5 +475,5 @@ def mono_handler(bot, update, msg_list):
             rob_bank(chat_id, username, to_user)
             update.message.reply_text("10s until robbery.")
             _thread.start_new_thread( start_robbery_countdown, (to_user, ) )
-            return
+            
 
