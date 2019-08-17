@@ -328,7 +328,7 @@ def rob_bank(chat_id, username, to_user):
     })
 
 def get_bank_robbers(chat_id, username):
-    items =  db.inventory.find({
+    items =  db.bankrob.find({
         "rob" : username
     })
     l_items = []
