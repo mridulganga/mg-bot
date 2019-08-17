@@ -436,33 +436,33 @@ def mono_handler(bot, update, msg_list):
 
     elif msg_list[1] in ["bankrob"]:
 
-        def start_robbery_countdown(user):
+        def start_robbery_countdown(to_rob_user):
             time.sleep(10)
             prob_dist = [True, False, False]
-            robbers = get_bank_robbers(chat_id, user)
+            robbers = get_bank_robbers(chat_id, to_rob_user)
             if len(robbers) > 1:
                 prob_dist.append(True)
                 prob_dist.append(True)
             
             win = random.choice(prob_dist)
             if win:
-                u = get_user(chat_id, user)
+                u = get_user(chat_id, to_rob_user)
                 bank_balance = int(u["bankbalance"])
                 rob_amount = random.randint(1, bank_balance)
                 share_amount = rob_amount/len(robbers)
                 for robber in robbers:
                     add_money(chat_id, robber, wallet = share_amount)
-                update.message.reply_text(user + " was robbed of " + str(rob_amount) + " by " + ", ".join(robbers)) + "."
-                rob_finish(chat_id, user)
+                update.message.reply_text(to_rob_user + " was robbed of " + str(rob_amount) + " by " + ", ".join(robbers)) + "."
+                rob_finish(chat_id, to_rob_user)
                 return    
             else:
                 for robber in robbers:
                     r = get_user(chat_id, robber)
                     robber_w,robber_b = int(r["wallet"]), int(r["bankbalance"])
                     set_money(chat_id, robber, robber_w/2, robber_b/2)
-                    add_money(chat_id, user, wallet= (robber_w + robber_b )/4)
-                update.message.reply_text(", ".join(robbers) + " were caught while robbing " + user + ". They lost half their money to " + user)
-                rob_finish(chat_id, user)
+                    add_money(chat_id, to_rob_user, wallet= (robber_w + robber_b )/4)
+                update.message.reply_text(", ".join(robbers) + " were caught while robbing " + to_rob_user + ". They lost half their money to " + user)
+                rob_finish(chat_id, to_rob_user)
                 return
 
         # username
