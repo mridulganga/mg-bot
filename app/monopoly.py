@@ -437,7 +437,7 @@ def mono_handler(bot, update, msg_list):
     elif msg_list[1] in ["bankrob"]:
 
         def start_robbery_countdown(user):
-            time.sleep(10000)
+            time.sleep(10)
             prob_dist = [True, False, False]
             robbers = get_bank_robbers(chat_id, user)
             if len(robbers) > 1:
