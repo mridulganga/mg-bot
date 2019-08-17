@@ -447,7 +447,7 @@ def mono_handler(bot, update, msg_list):
             win = random.choice(prob_dist)
             if win:
                 u = get_user(chat_id, user)
-                bank_balance = u["bankbalance"]
+                bank_balance = int(u["bankbalance"])
                 rob_amount = random.randint(1, bank_balance)
                 share_amount = rob_amount/len(robbers)
                 for robber in robbers:
@@ -458,9 +458,9 @@ def mono_handler(bot, update, msg_list):
             else:
                 for robber in robbers:
                     r = get_user(chat_id, robber)
-                    robber_w,robber_b = r["wallet"], r["bankbalance"]
+                    robber_w,robber_b = int(r["wallet"]), int(r["bankbalance"])
                     set_money(chat_id, robber, robber_w/2, robber_b/2)
-                    add_money(chat_id, user, wallet= (r["wallet"] + r["bankbalance"] )/4)
+                    add_money(chat_id, user, wallet= (robber_w + robber_b )/4)
                 update.message.reply_text(", ".join(robbers) + " were caught while robbing " + user + ". They lost half their money to " + user)
                 rob_finish(chat_id, user)
                 return
