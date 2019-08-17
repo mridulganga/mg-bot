@@ -333,7 +333,7 @@ def get_bank_robbers(chat_id, username):
     })
     l_items = []
     for item in items:
-        l_items.append(item)
+        l_items.append(item["by_user"])
     return l_items
 
 def rob_finish(chat_id, username):
