@@ -329,7 +329,7 @@ def rob_bank(chat_id, username, to_user):
 
 def get_bank_robbers(chat_id, username):
     items =  db.inventory.find({
-        "rob" : username}
+        "rob" : username
     })
     l_items = []
     for item in items:
