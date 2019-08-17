@@ -460,6 +460,7 @@ def mono_handler(bot, update, msg_list):
                     add_money(chat_id, user, wallet= (r["wallet"] + r["bankbalance"] )/4)
                 update.message.reply_text(", ".join(robbers) + " were caught while robbing " + user + ". They lost half their money to " + user)
             rob_finish(chat_id, user)
+            return
 
         # username
         to_user = msg_list[2].replace("@","")
@@ -472,4 +473,5 @@ def mono_handler(bot, update, msg_list):
             rob_bank(chat_id, username, to_user)
             update.message.reply_text("10s until robbery.")
             _thread.start_new_thread( start_robbery_countdown, (to_user, ) )
+            return
 
