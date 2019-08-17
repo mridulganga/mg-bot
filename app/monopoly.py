@@ -462,7 +462,7 @@ def mono_handler(bot, update, msg_list):
                     robber_w,robber_b = int(r["wallet"]), int(r["bankbalance"])
                     set_money(chat_id, robber, robber_w/2, robber_b/2)
                     add_money(chat_id, to_rob_user, wallet= (robber_w + robber_b )/4)
-                update.message.reply_text(", ".join(robbers) + " were caught while robbing " + to_rob_user + ". They lost half their money to " + user)
+                update.message.reply_text(", ".join(robbers) + " were caught while robbing " + to_rob_user + ". They lost half their money to " + to_rob_user)
                 rob_finish(chat_id, to_rob_user)
                 return
 
