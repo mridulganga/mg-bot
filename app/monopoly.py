@@ -444,11 +444,11 @@ def mono_handler(bot, update, msg_list):
                 prob_dist.append(True)
                 prob_dist.append(True)
             
-            win = choice(prob_dist)
+            win = random.choice(prob_dist)
             if win:
                 u = get_user(chat_id, user)
                 bank_balance = u["bankbalance"]
-                rob_amount = randint(1, bank_balance)
+                rob_amount = random.randint(1, bank_balance)
                 share_amount = rob_amount/len(robbers)
                 for robber in robbers:
                     add_money(chat_id, robber, wallet = share_amount)
