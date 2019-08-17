@@ -444,10 +444,15 @@ def mono_handler(bot, update, msg_list):
                 prob_dist.append(True)
                 prob_dist.append(True)
             
+            u = get_user(chat_id, to_rob_user)
+            bank_balance = int(u["bankbalance"])
+            if bank_balance==0:
+                update.message.reply_text(to_rob_user + " is broke, can't rob them.")
+                rob_finish(chat_id, to_rob_user)
+                return
+
             win = random.choice(prob_dist)
             if win:
-                u = get_user(chat_id, to_rob_user)
-                bank_balance = int(u["bankbalance"])
                 rob_amount = random.randint(1, bank_balance)
                 deduct_money(chat_id, to_rob_user,bank=rob_amount)
                 share_amount = rob_amount/len(robbers)
