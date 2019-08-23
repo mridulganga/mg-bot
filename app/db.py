@@ -336,6 +336,10 @@ def get_bank_robbers(chat_id, username):
         l_items.append(item["by_user"])
     return l_items
 
+def is_robbing(chat_id, username):
+    res = db.bankrob.find_one({"by_user":username})
+    return True if res else False
+
 def rob_finish(chat_id, username):
     db.bankrob.remove({"rob":username})
 

@@ -437,50 +437,68 @@ def mono_handler(bot, update, msg_list):
     elif msg_list[1] in ["bankrob"]:
 
         def start_robbery_countdown(to_rob_user):
-            time.sleep(10)
+            time.sleep(20)
             prob_dist = [True, False, False]
-            robbers = get_bank_robbers(chat_id, to_rob_user)
-            if len(robbers) > 1:
-                prob_dist.append(True)
-                prob_dist.append(True)
-            
-            u = get_user(chat_id, to_rob_user)
-            bank_balance = int(u["bankbalance"])
-            if bank_balance==0:
-                update.message.reply_text(to_rob_user + " is broke, can't rob them.")
-                rob_finish(chat_id, to_rob_user)
-                return
+            try:
+                robbers = get_bank_robbers(chat_id, to_rob_user)
+                if len(robbers) > 1:
+                    prob_dist.append(True)
+                    prob_dist.append(True)
+                
+                u = get_user(chat_id, to_rob_user)
+                bank_balance = int(u["bankbalance"])
+                if bank_balance==0:
+                    update.message.reply_text(to_rob_user + " is broke, can't rob them.")
+                    rob_finish(chat_id, to_rob_user)
+                    return
 
-            win = random.choice(prob_dist)
-            if win:
-                rob_amount = random.randint(1, bank_balance)
-                deduct_money(chat_id, to_rob_user,bank=rob_amount)
-                share_amount = rob_amount/len(robbers)
-                for robber in robbers:
-                    add_money(chat_id, robber, wallet = share_amount)
-                update.message.reply_text(str(to_rob_user) + " was robbed of " + str(rob_amount) + " by " + ", ".join(robbers) + "." ) 
+                win = random.choice(prob_dist)
+                if win:
+                    rob_amount = random.randint(1, bank_balance)
+                    deduct_money(chat_id, to_rob_user,bank=rob_amount)
+                    share_amount = rob_amount/len(robbers)
+                    for robber in robbers:
+                        add_money(chat_id, robber, wallet = share_amount)
+                    update.message.reply_text(str(to_rob_user) + " was robbed of " + str(rob_amount) + " by " + ", ".join(robbers) + "." ) 
+                    rob_finish(chat_id, to_rob_user)
+                    return    
+                else:
+                    for robber in robbers:
+                        r = get_user(chat_id, robber)
+                        robber_w,robber_b = int(r["wallet"]), int(r["bankbalance"])
+                        set_money(chat_id, robber, robber_w/2, robber_b/2)
+                        add_money(chat_id, to_rob_user, wallet= (robber_w + robber_b )/4)
+                    update.message.reply_text(", ".join(robbers) + " were caught while robbing " + to_rob_user + ". They lost half their money to " + to_rob_user)
+                    rob_finish(chat_id, to_rob_user)
+                    return
+            except:
+                update.message.reply_text("Some problem occured, this robbery has not been successful.")
+            finally:
                 rob_finish(chat_id, to_rob_user)
-                return    
-            else:
-                for robber in robbers:
-                    r = get_user(chat_id, robber)
-                    robber_w,robber_b = int(r["wallet"]), int(r["bankbalance"])
-                    set_money(chat_id, robber, robber_w/2, robber_b/2)
-                    add_money(chat_id, to_rob_user, wallet= (robber_w + robber_b )/4)
-                update.message.reply_text(", ".join(robbers) + " were caught while robbing " + to_rob_user + ". They lost half their money to " + to_rob_user)
-                rob_finish(chat_id, to_rob_user)
-                return
 
         # username
+
+        if is_robbing(chat_id, username):
+            update.message.reply_text("You are already involved in a robbery.")
+            return
+
+        if len(msg_list) < 3: 
+            update.message.reply_text("Whom do you want to rob?.")
+            return
+
         to_user = (msg_list[2].replace("@","")).lower()
+
+        if to_user == username:
+            update.message.reply_text("There is no point robbing yourself.")
+            return
 
         robbers = get_bank_robbers(chat_id, to_user)
         if robbers:
             rob_bank(chat_id, username, to_user)
-            update.message.reply_text("Joined robbery.")
+            update.message.reply_text("Joined robbery with " + ", ".(robbers))
         else:
             rob_bank(chat_id, username, to_user)
-            update.message.reply_text("10s until robbery.")
+            update.message.reply_text("20s until robbery.")
             _thread.start_new_thread( start_robbery_countdown, (to_user, ) )
             
 
