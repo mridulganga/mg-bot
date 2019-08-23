@@ -6,8 +6,8 @@ import logging.config
 
 # Say i have saved my configuration under ./myconf.conf
 logging.config.fileConfig('logging.conf')
-debug_logger = logging.getLogger('debug_logger')
-msg_logger = logging.getLogger('msg_logger')
+debug_logger = logging.getLogger('root')
+msg_logger = logging.getLogger('root')
 
 # logger.info('Test log')
 # logger.warn('Warning')
