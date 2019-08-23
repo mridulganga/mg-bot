@@ -44,3 +44,10 @@ msg_logger = logging.getLogger('mlog')
 # # msg_formatter = logging.Formatter('%(asctime)s - %(message)s')
 # # msg_fh.setFormatter(msg_formatter)
 # # msg_logger.addHandler(msg_fh)
+
+
+if __name__=="__main__":
+    r = logging.getLogger()
+    while(True):
+        text = input()
+        msg_logger.info(text)
