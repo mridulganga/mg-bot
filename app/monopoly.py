@@ -495,7 +495,7 @@ def mono_handler(bot, update, msg_list):
         robbers = get_bank_robbers(chat_id, to_user)
         if robbers:
             rob_bank(chat_id, username, to_user)
-            update.message.reply_text("Joined robbery with " + ", ".(robbers))
+            update.message.reply_text("Joined robbery with " + ", ".join(robbers))
         else:
             rob_bank(chat_id, username, to_user)
             update.message.reply_text("20s until robbery.")
