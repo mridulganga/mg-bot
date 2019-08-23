@@ -2,7 +2,7 @@ from app.db import *
 
 def admin_handler(bot, update, msg_list):
     chat_id = update.message.chat_id
-    if update.message.from_user.status in ['creator', 'administrator']:
+    if bot.get_member(chat_id, update.message.from_user.id).status in ['creator', 'administrator']:
         is_admin=True
     else:
         update.message.reply_text("You are not admin.")
