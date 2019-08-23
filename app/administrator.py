@@ -5,7 +5,7 @@ def admin_handler(bot, update, msg_list):
     chat_id = update.message.chat_id
     
 
-    update.message.reply_text(str(bot.get_administrators(chat_id)))
+    update.message.reply_text(str(bot.get_chat_administrators(chat_id)))
 
 
     # if bot.get_member(chat_id, update.message.from_user.id).status in ['creator', 'administrator']:
