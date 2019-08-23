@@ -4,10 +4,10 @@ from app.db import *
 def admin_handler(bot, update, msg_list):
     chat_id = update.message.chat_id
     
-    if_admin=False
+    is_admin=False
     for admin in bot.get_chat_administrators(chat_id):
         if admin.user.username == update.message.from_user.username:
-            if_admin = True
+            is_admin = True
 
     if is_admin==False:
         update.message.reply_text("You are not admin.")
