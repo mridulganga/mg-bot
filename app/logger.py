@@ -1,4 +1,5 @@
 import logging
+import logging.config
 
 logging.config.fileConfig('logging.conf')
 debug_logger = logging.getLogger('dlog')
