@@ -2,7 +2,7 @@ from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 import telegram
 import datetime
 
-from app.logger import msg_logger, debug_logger
+from app.logger import logger
 from app.todo import todo_handler
 from app.animals import animal_handler
 from app.fun import fun_handler
@@ -27,7 +27,7 @@ def start(bot, update):
 
 
 def error(bot, update, msg_list):
-    debug_logger.debug(str(update.message.chat_id) + " - " + update.message.from_user.username + " || " + str(msg_list))
+    logger.debug("ERROR : " + str(update.message.chat_id) + " - " + update.message.from_user.username + " || " + str(msg_list))
 
 
 def msg_parser(bot, update):
@@ -59,9 +59,9 @@ def msg_parser(bot, update):
         elif msg_list[1] == "help":
             help_handler(bot,update,msg_list)
         else:
-            debug_logger.debug(str(msg_list))
+            error(bot, update, msg_list)
 
-        msg_logger.info(str(update.message.chat_id) + "  | " + update.message.from_user.username + " : " + str(msg_list))
+        logger.info(str(update.message.chat_id) + "  | " + update.message.from_user.username + " : " + str(msg_list))
 
     elif msg_list[0] in ["hello","hi", "hey", "sup", "hii"]:
         update.message.reply_text("Hello there!")
