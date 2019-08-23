@@ -2,8 +2,11 @@ from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 from app.db import *
 
 def admin_handler(bot, update, msg_list):
-    update.message.reply_text("Test")
-    # chat_id = update.message.chat_id
+    chat_id = update.message.chat_id
+    
+
+    update.message.reply_text(str(bot.get_administrators(chat_id)))
+
 
     # if bot.get_member(chat_id, update.message.from_user.id).status in ['creator', 'administrator']:
     #     is_admin=True

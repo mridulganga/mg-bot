@@ -1,6 +1,7 @@
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 
 import os
+import sys
 
 import app.basic as basic
 from app.poll import poll_handler
@@ -25,12 +26,14 @@ def main():
 
     dp.add_error_handler(basic.error)
 
-    # updater.start_polling()
-
-    updater.start_webhook(listen="0.0.0.0",
-                      port=int(os.environ["PORT"]),
-                      url_path=token)
-    updater.bot.set_webhook("https://telegram-mg-bot.herokuapp.com/" + token)
+    if len(sys.argv) > 1:
+        if sys.argv[1] == "local":
+            updater.start_polling()
+    else:
+        updater.start_webhook(listen="0.0.0.0",
+                        port=int(os.environ["PORT"]),
+                        url_path=token)
+        updater.bot.set_webhook("https://telegram-mg-bot.herokuapp.com/" + token)
 
 
     updater.idle()
