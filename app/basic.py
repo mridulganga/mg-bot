@@ -9,6 +9,7 @@ from app.fun import fun_handler
 from app.poll import poll_extras_handler
 from app.monopoly import mono_handler
 from app.help import help_handler
+from app.admin import admin_handler
 
 animal_list = ["dog","bark","bork","cat","meow","pussy","panda","redpanda",
                 "pika","pikachu","fox"]
@@ -58,6 +59,10 @@ def msg_parser(bot, update):
 
         elif msg_list[1] == "help":
             help_handler(bot,update,msg_list)
+        
+        elif msg_list[1] == "admin":
+            admin_handler(bot, update, msg_list)
+
         else:
             error(bot, update, msg_list)
 
