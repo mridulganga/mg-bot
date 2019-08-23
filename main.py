@@ -1,15 +1,6 @@
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 
-
-# need this to log erros
-import logging
 import os
-
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',	
-                    level=logging.INFO)	
-logger = logging.getLogger(__name__)
-# do not remove
-
 
 import app.basic as basic
 from app.poll import poll_handler
