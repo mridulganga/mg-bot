@@ -1,5 +1,9 @@
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+import telegram
 import datetime
+import random
+import _thread
+import time
 from app.use import use_handler
 from app.db import *
 
@@ -9,6 +13,24 @@ from app.utils import *
 # the username can only be initialised by user
 def check_mono_initialized(chat_id,username):
     create_user(chat_id, username)
+
+def deduct_money_wrapper(chat_id,username,money):
+    if money<0: return False
+    user = get_user(chat_id, username)
+    if has_active_debitcard(chat_id, username):
+        if user["wallet"] >= money:
+            deduct_money(chat_id, username, wallet = money)
+        elif user["wallet"] + user["bankbalance"] >= money + int(money*0.05):
+            money += int(money*0.005)
+            deduct_money(chat_id, username, wallet = user["wallet"], bank=money-user["wallet"])
+        else:
+            return False
+    else:   # doesnt have debit card
+        if user["wallet"] >= money:
+            deduct_money(chat_id, username, wallet = money)
+        else:
+            return False
+    return True
 
 
 def mono_handler(bot, update, msg_list):
@@ -89,17 +111,14 @@ def mono_handler(bot, update, msg_list):
     # pls beg
     # beg timer = 10s
     elif msg_list[1] in ["beg"]:
-        import random
         if "last_beg" in user:
             if not (datetime.datetime.today() - user["last_beg"]).seconds > 10:
                 update.message.reply_text("You're begging too much. Stop it!! (wait %d seconds)" % \
                                     (10-int((datetime.datetime.today() - user["last_beg"]).seconds)))
                 return
-        donators = choose_random(load_replies("donators"))
-        beg_lines = choose_random(load_replies("beg_lines"))
-        
-        beg_from = donators[random.randint(0,len(donators)-1)]
-        beg_line = beg_lines[random.randint(0,len(beg_lines)-1)]
+
+        beg_from = choose_random(load_replies("donators"))
+        beg_line = choose_random(load_replies("beg_lines"))
         
         beg_amount = random.randint(10,100)
         user["last_beg"] = datetime.datetime.today()
@@ -118,7 +137,6 @@ def mono_handler(bot, update, msg_list):
                 time_left = str(diff_time.seconds//3600) + "hrs and " + str((diff_time.seconds//60)%60) + "mins"
                 update.message.reply_text("You have already gotten your share for the day, try again after " + time_left)
                 return
-        import random
         money = random.randint(200,300)
         user["last_daily"] = datetime.datetime.today()
         update_user(user)
@@ -133,14 +151,11 @@ def mono_handler(bot, update, msg_list):
             if (datetime.datetime.today() - user["last_search"]).seconds < 10:
                 update.message.reply_text("You need to wait "+ str(10-(datetime.datetime.today() - user["last_search"]).seconds) +"s to continue searching.")
                 return
-        import random
         money = random.randint(20,100)
         user["last_search"] = datetime.datetime.today()
         update_user(user)
         add_money(chat_id, username, money)
-
-        search_strings = choose_random(load_replies("search_lines"))
-        search_string = search_strings[random.randint(0,len(search_strings)-1)]
+        search_string = choose_random(load_replies("search_lines"))
         update.message.reply_text("Congrats you found " + str(money) + " " + search_string)
 
 
@@ -156,12 +171,13 @@ def mono_handler(bot, update, msg_list):
             if username in lottery_users:   # participated already
                 update.message.reply_text("You have already participated. Use \npls lottery results")
             else:   # participate in lottery
-                if user["wallet"] >= 10:
-                    deduct_money(chat_id, username, wallet = 10)
-                    buy_lottery(chat_id, username)
+                if deduct_money_wrapper(chat_id, username, money=100):
                     update.message.reply_text("You have successfully participated in the lottery.")
+                    buy_lottery(chat_id, username)
                 else:
                     update.message.reply_text("You dont even have enough money to buy a lottery ticket.")
+                
+                    
                 
         elif msg_list[2] in ["view"]:
             if len(lottery_users) > 0:
@@ -172,7 +188,6 @@ def mono_handler(bot, update, msg_list):
         elif msg_list[2] in ["result","results"]:    
             num = len(lottery_users)
             money = 10 * num * num
-            import random 
             winner = lottery_users[random.randint(0, len(lottery_users)-1)] # random select
             # u = get_user(chat_id, winner)
             add_money(chat_id, winner, wallet=money)
@@ -193,9 +208,9 @@ def mono_handler(bot, update, msg_list):
             money = int(msg_list[3])
         except:
             update.message.reply_text("Please enter a valid numeric amount.")
+            return
 
-        if user["wallet"] > money and money > 0:
-            deduct_money(chat_id, username, wallet=money)
+        if deduct_money_wrapper(chat_id, username, money):
             u = get_user(chat_id, to_user)
             add_money(chat_id, to_user, money)
             update.message.reply_text("Money has been sent.")
@@ -215,15 +230,15 @@ def mono_handler(bot, update, msg_list):
                 return
         else:
             money = int(msg_list[2])
-            if money < 2 or money > user["wallet"]:
+            if money < 1 or money > user["wallet"]:
                 update.message.reply_text("You dont have enough money to gamble.")
                 return
 
-        import random
-        game = random.randint(1,2)
+        
+        game = random.choice([True, True, True, False, False])
         multiplier =  float(random.randint(80,100) /100)
 
-        if game==2:  # win
+        if game:  # win
             money = int(money * multiplier)
             add_money(chat_id, username, money)
             update.message.reply_text("Congrats!!\nYou won this round. You got " + str(money))
@@ -250,7 +265,6 @@ def mono_handler(bot, update, msg_list):
             return
 
         # success or got caught
-        import random
         steal_or_not = random.randint(1,2)
 
         if steal_or_not == 2: # steal successfull
@@ -285,10 +299,14 @@ def mono_handler(bot, update, msg_list):
     # pls shop
     elif msg_list[1] in ["shop", "market", "store"]:
         shop = get_shop_items()
-        item_str = "Shop Items :\n"
+        item_str = "*Shop Items :*`\n" 
         for item in shop:
             item_str += item["name"] + " = " + str(item["price"]) + "\n"
-        update.message.reply_text(item_str)
+        item_str += "`"
+        # update.message.reply_text(item_str)
+        bot.send_message(chat_id=chat_id, 
+        text=item_str, 
+        parse_mode=telegram.ParseMode.MARKDOWN)
 
 
 
@@ -298,10 +316,17 @@ def mono_handler(bot, update, msg_list):
         item_name = msg_list[2]
         shop_item = get_shop_item(item_name)
         if shop_item:
-            if shop_item["price"] <= user["wallet"]:
-                add_item_inventory(chat_id, username, item_name, shop_item["price"])
-                update.message.reply_text("Item " + item_name + " has been purchased")
-                deduct_money(chat_id, username, shop_item["price"])
+            # limited items
+            if "limit" in shop_item:
+                if shop_item["limit"] <= get_item_quantity(chat_id, username, item_name):
+                    update.message.reply_text("You can only buy " + str(shop_item["limit"]) + " " + item_name)
+                    return
+
+            if deduct_money_wrapper(chat_id, username, shop_item["price"]):
+                expiry = shop_item["expiry"] if "expiry" in shop_item else None
+                # deduct_money(chat_id, username, shop_item["price"])
+                add_item_inventory(chat_id, username, item_name, shop_item["price"], expiry=expiry)
+                update.message.reply_text("Item " + item_name + " has been purchased")                
             else:
                 update.message.reply_text("You dont have enough money.")
         else:
@@ -323,23 +348,37 @@ def mono_handler(bot, update, msg_list):
 
     # pls inventory
     # View the Items in the Shop
-    elif msg_list[1] in ["inventory"]:
+    elif msg_list[1] in ["inventory"]: 
         inventory = get_inventory(chat_id, username)
         if inventory:
-            items_str = "Inventory Items :\n"
+            items_str = "*Inventory Items for "+ username +" :*`\n"
             for item in inventory:
-                items_str += item["name"] + "("+ str(item["quantity"]) +") = " + str(item["price"])
-            update.message.reply_text(items_str)
+
+                if item_has_expired(chat_id, username, item["name"]):
+                    remove_item_inventory(chat_id, username, item["name"])
+                    update.message.reply_text(item["name"] + " has expired.")
+                    continue
+                
+                items_str += item["name"] + "("+ str(item["quantity"]) +") = " + str(item["price"]) + "\n"
+            items_str +="`"
+            # update.message.reply_text(items_str)
+
+            bot.send_message(chat_id=chat_id, 
+                text=items_str, 
+                parse_mode=telegram.ParseMode.MARKDOWN)
     
 
     # pls use apple
-    # pls use cake @username
+    # pls use cake 
     elif msg_list[1] in ["use"]:
         if get_item_quantity(chat_id, username, msg_list[2]) == 0:
             update.message.reply_text("Item not in inventory")
         else:
+            if item_has_expired(chat_id, username, msg_list[2])==False:
+                use_handler(bot, update, msg_list)
+            else:
+                update.message.reply_text(msg_list[2] + " has expired.")
             remove_item_inventory(chat_id, username, msg_list[2])
-            use_handler(bot, update, msg_list)
 
 
 
@@ -351,24 +390,32 @@ def mono_handler(bot, update, msg_list):
             if loan:
                 money = loan["amount"]
                 time_period = int(( datetime.datetime.today() - loan["takenat"]).total_seconds() / 3600)
-                interest = int(money*5*time_period/100)
+                interest = int(money*time_period*0.0005)
                 update.message.reply_text("Loan :\nAmount: " + str(money) + "\nInterest : " + \
                             str(interest) + "\n Time Period : " + str(time_period) + "hrs")
             else:
                 update.message.reply_text("You haven't taken any loans.")
-        elif msg_list[2] in ["return","repay", "pay"]:
+        
+        elif msg_list[2] in ["return","repay", "pay"]: 
             loan = get_loan(chat_id, username)
             if loan:
+               
                 money = loan["amount"]
                 # interest every hr
-                time_period = ( datetime.datetime.today() - loan["takenat"]).total_seconds() / 3600
-                repay_amount = int(money + (money*5*time_period)/100)
-                if user["wallet"] >= repay_amount:
-                    deduct_money(chat_id, username, repay_amount)
-                    clear_loan(chat_id, username)
-                    update.message.reply_text("You repaid your loan.")
+                time_period = int(( datetime.datetime.today() - loan["takenat"]).total_seconds() / 3600)
+                total_amount = int(money + int((money*time_period)*0.0005))
+                repay_amount = total_amount
+                if len(msg_list) == 4:
+                    repay_amount = int(msg_list[3])
+                
+                if deduct_money_wrapper(chat_id, username, repay_amount):
+                    revise_loan(chat_id, username, total_amount - repay_amount)
+                    if repay_amount == total_amount:
+                        update.message.reply_text("You cleared your loan.")
+                    else:
+                        update.message.reply_text("You paid part of your loan.")
                 else:
-                    update.message.reply_text("You need " + str(repay_amount) + " in your wallet.")
+                    update.message.reply_text("You need " + str(repay_amount) + " in your wallet/bank.")
             else:
                 update.message.reply_text("You haven't taken any loans.")
             
@@ -376,12 +423,81 @@ def mono_handler(bot, update, msg_list):
             money = int(msg_list[2])
             loan = get_loan(chat_id, username)
             if not loan:
-                if money > 0 and money <= 50000:
+                if money > 0 and money <= 100000:
                     take_loan(chat_id, username, money)
                     add_money(chat_id, username, money)
                     update.message.reply_text("You took a loan for " + str(money))    
                 else:
-                    update.message.reply_text("Please enter a value between 1 and 50000.")    
+                    update.message.reply_text("Please enter a value between 1 and 100000.")    
             else:
                 update.message.reply_text("You already have an outstanding loan.")
                 return
+
+    elif msg_list[1] in ["bankrob"]:
+
+        def start_robbery_countdown(to_rob_user):
+            time.sleep(20)
+            prob_dist = [True, False, False]
+            try:
+                robbers = get_bank_robbers(chat_id, to_rob_user)
+                if len(robbers) > 1:
+                    prob_dist.append(True)
+                    prob_dist.append(True)
+                
+                u = get_user(chat_id, to_rob_user)
+                bank_balance = int(u["bankbalance"])
+                if bank_balance==0:
+                    update.message.reply_text(to_rob_user + " is broke, can't rob them.")
+                    rob_finish(chat_id, to_rob_user)
+                    return
+
+                win = random.choice(prob_dist)
+                if win:
+                    rob_amount = random.randint(1, bank_balance)
+                    deduct_money(chat_id, to_rob_user,bank=rob_amount)
+                    share_amount = rob_amount/len(robbers)
+                    for robber in robbers:
+                        add_money(chat_id, robber, wallet = share_amount)
+                    update.message.reply_text(str(to_rob_user) + " was robbed of " + str(rob_amount) + " by " + ", ".join(robbers) + "." ) 
+                    rob_finish(chat_id, to_rob_user)
+                    return    
+                else:
+                    for robber in robbers:
+                        r = get_user(chat_id, robber)
+                        robber_w,robber_b = int(r["wallet"]), int(r["bankbalance"])
+                        set_money(chat_id, robber, robber_w/2, robber_b/2)
+                        add_money(chat_id, to_rob_user, wallet= (robber_w + robber_b )/4)
+                    update.message.reply_text(", ".join(robbers) + " were caught while robbing " + to_rob_user + ". They lost half their money to " + to_rob_user)
+                    rob_finish(chat_id, to_rob_user)
+                    return
+            except:
+                update.message.reply_text("Some problem occured, this robbery has not been successful.")
+            finally:
+                rob_finish(chat_id, to_rob_user)
+
+        # username
+
+        if is_robbing(chat_id, username):
+            update.message.reply_text("You are already involved in a robbery.")
+            return
+
+        if len(msg_list) < 3: 
+            update.message.reply_text("Whom do you want to rob?.")
+            return
+
+        to_user = (msg_list[2].replace("@","")).lower()
+
+        if to_user == username:
+            update.message.reply_text("There is no point robbing yourself.")
+            return
+
+        robbers = get_bank_robbers(chat_id, to_user)
+        if robbers:
+            rob_bank(chat_id, username, to_user)
+            update.message.reply_text("Joined robbery with " + ", ".join(robbers))
+        else:
+            rob_bank(chat_id, username, to_user)
+            update.message.reply_text("20s until robbery.")
+            _thread.start_new_thread( start_robbery_countdown, (to_user, ) )
+            
+

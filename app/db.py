@@ -1,12 +1,15 @@
 import pymongo
 import datetime
+import os
 
-mongo_creds = open("api/mongo","r")
-client = pymongo.MongoClient(mongo_creds.read())
+# mongo_creds = open("api/mongo","r")
+# client = pymongo.MongoClient(mongo_creds.read())
+
+client = pymongo.MongoClient(os.environ["MONGO"])
 db = client.main
 
 def init():
-    for collection in ["chats","users","shop","polls","todos","inventory", "loans"]:
+    for collection in ["chats","users","shop","polls","todos","inventory", "loans", "helps"]:
         try:
             db.create_collection(collection)
         except pymongo.errors.CollectionInvalid:
@@ -41,6 +44,7 @@ def get_users(chat_id):
     return db.users.find({"chat_id":str(chat_id)})
 
 def get_user(chat_id,username):
+    username = username.lower()
     return db.users.find_one({
         "$and":[ {"username":username}, {"chat_id":str(chat_id)}]
     })
@@ -60,7 +64,6 @@ def create_user(chat_id, username):
             "wallet" : 0,
             "bankbalance" : 0,
             "chat_id" : str(chat_id),
-            "inventory" : None
         })
     user = get_user(chat_id,username)
     return user
@@ -235,18 +238,20 @@ def get_item_inventory(chat_id, username, item_name):
 def save_item_intentory(item):
     db.inventory.find_one_and_replace({"_id":item["_id"]},item)
 
-def add_item_inventory(chat_id, username, item_name, price):
+def add_item_inventory(chat_id, username, item_name, price, expiry=None):
     inventory = get_inventory(chat_id, username)
     if inventory:
         item = get_item_inventory(chat_id, username, item_name)
         if not item:
-            db.inventory.insert({
+            item = {
                 "name" : item_name,
                 "quantity" : 1,
                 "price" : price,
                 "chat_id" : str(chat_id),
                 "username" : username
-            })
+            }
+            if expiry: item["expiry"] = datetime.datetime.today() + datetime.timedelta(days=expiry) 
+            db.inventory.insert(item)
         else:
             item["quantity"] +=1
             save_item_intentory(item)
@@ -257,6 +262,24 @@ def get_item_quantity(chat_id, username, item_name):
         return 0
     else:
         return int(item["quantity"])
+
+def item_has_expired(chat_id, username, item_name):
+    item = get_item_inventory(chat_id, username, item_name)
+    if not item: return False
+    if "expiry" in item:
+        if item["expiry"] < datetime.datetime.today():
+            return True
+        else:
+            return False
+    return False
+
+def has_active_debitcard(chat_id, username):
+    if get_item_inventory(chat_id, username, "debitcard"):
+        if item_has_expired(chat_id, username, "debitcard"):
+            remove_item_inventory(chat_id, username, "debitcard")
+            return False
+        else:
+            return True
 
 def remove_item_inventory(chat_id, username, item_name):
     item = get_item_inventory(chat_id, username, item_name)
@@ -283,6 +306,12 @@ def clear_loan(chat_id, username):
         "$and" : [{"chat_id":str(chat_id)},{"username":username}]
     })
 
+
+def revise_loan(chat_id, username, new_amount):
+    clear_loan(chat_id, username)
+    if new_amount>0:
+        take_loan(chat_id, username, new_amount)
+
 def take_loan(chat_id, username, amount):
     import datetime
     db.loans.insert_one({
@@ -291,6 +320,34 @@ def take_loan(chat_id, username, amount):
         "chat_id" : str(chat_id),
         "username" : username
     })
+
+def rob_bank(chat_id, username, to_user):
+    db.bankrob.insert_one({
+        "rob":to_user,
+        "by_user": username
+    })
+
+def get_bank_robbers(chat_id, username):
+    items =  db.bankrob.find({
+        "rob" : username
+    })
+    l_items = []
+    for item in items:
+        l_items.append(item["by_user"])
+    return l_items
+
+def is_robbing(chat_id, username):
+    res = db.bankrob.find_one({"by_user":username})
+    return True if res else False
+
+def rob_finish(chat_id, username):
+    db.bankrob.remove({"rob":username})
+
+
+def get_help(command):
+    h = db.helps.find_one({"keywords":command})
+    if h: return h
+    else: return None
 
 
 init()

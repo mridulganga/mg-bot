@@ -2,20 +2,15 @@ from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 import telegram
 import datetime
 
-
-# def log_command(s):
-#     with open("log.txt", "a") as myfile:
-#         myfile.write(s)
-
-from app.logger import msg_logger, debug_logger
+from app.logger import logger
 from app.todo import todo_handler
 from app.animals import animal_handler
 from app.fun import fun_handler
 from app.poll import poll_extras_handler
 from app.monopoly import mono_handler
-from app.help_strings import get_help
-from app.news import news_handler
-# import logging
+from app.help import help_handler
+from app.administrator import admin_handler
+
 
 animal_list = ["dog","bark","bork","cat","meow","pussy","panda","redpanda",
                 "pika","pikachu","fox"]
@@ -23,34 +18,20 @@ animal_list = ["dog","bark","bork","cat","meow","pussy","panda","redpanda",
 fun_list = ["google","joke", "roast", "mock", "meme", "quote", "xkcd", "avatar", 
                 "geek", "geekjoke", "dice", "coin", "flip", "choose","select",
                 "unsplash", "wall", "wallpaper","die", "kill", "wink", "asktrump",
-                "dadjoke", "belikebill", "yesno", "advice"]
+                "dadjoke", "belikebill", "yesno", "advice", "yomama"]
+
 
 monopoly_list = ["balance", "beg", "daily", "search", "buy", "sell", "use", "steal", "shop", "market", "store", 
                 "purchase", "inventory", "deposit", "withdraw",
-                "lottery", "gamble", "share", "send", "rich", "loan"]
+                "lottery", "gamble", "share", "send", "rich", "loan", "bankrob"]
 
 news_list = ["news", "entertainment", "general", "health", "science", "sports", "technology"]
 
 def start(bot, update):
     update.message.reply_text('Hi!')
 
-
-def help(bot, update, msg_list):
-    if len(msg_list) > 2:
-        help_str = get_help(msg_list[2])
-        # update.message.reply_text("Help : \n" + help_str)
-        bot.send_message(chat_id=update.message.chat_id, 
-                text=help_str, 
-                parse_mode=telegram.ParseMode.MARKDOWN)
-    else:
-        help_str = "*Main Sections*:\n`Fun\nChoose\nAnimals\nTodo\nPoll\nMonopoly\nNews\n\n`*Use*:\n`pls help command`"
-
-        bot.send_message(chat_id=update.message.chat_id, 
-                text=help_str, 
-                parse_mode=telegram.ParseMode.MARKDOWN)
-
 def error(bot, update, msg_list):
-    debug_logger.debug(str(update.message.chat_id) + " - " + update.message.from_user.username + " || " + str(msg_list))
+    logger.debug("ERROR : " + str(update.message.chat_id) + " - " + update.message.from_user.username + " || " + str(msg_list))
 
 
 def msg_parser(bot, update):
@@ -59,31 +40,19 @@ def msg_parser(bot, update):
     if msg_list[0] in ["mg","pls", "kini"]:
 
         if len(msg_list) == 1:
-            return
+            update.message.reply_text("You didn't write any command. \nTry `pls help`")
 
         if msg_list[1] in animal_list:
             animal_handler(bot, update, msg_list)
 
-        elif msg_list[1] in ["games","game"]:
-            pass
-
         elif msg_list[1] in monopoly_list:
             mono_handler(bot,update,msg_list)
-
-        elif msg_list[1] in ["images", "image", "pics", "pic", "photos", "photo"]:
-            pass 
 
         elif msg_list[1] in fun_list:
             fun_handler(bot,update, msg_list)
 
-        elif msg_list[1] in news_list:
-            news_handler(bot, update, msg_list)
-
-        elif msg_list[1] in ["do","todo","tasks"]:      #done
+        elif msg_list[1] in ["do","todo","tasks"]:
             todo_handler(bot, update, msg_list[1:])
-
-        elif msg_list[1] in ["calender","cal", "events", "event"]:
-            pass
 
         elif msg_list[1] in ["now", "time"]:
             update.message.reply_text(str(datetime.datetime.utcnow()))
@@ -92,12 +61,16 @@ def msg_parser(bot, update):
             poll_extras_handler(bot, update, msg_list)
 
         elif msg_list[1] == "help":
-            help(bot,update,msg_list)
-        else:
-            debug_logger.debug(str(msg_list))
-            #help(bot,update,msg_list)
+            help_handler(bot,update,msg_list)
+        
+        elif msg_list[1] == "admin":
+            admin_handler(bot, update, msg_list)
 
-        msg_logger.info(str(update.message.chat_id) + "  || " + update.message.from_user.username + " : " + str(msg_list))
-    elif msg_list[0] in ["hello","hi"]:
+        else:
+            error(bot, update, msg_list)
+
+        logger.info(str(update.message.chat_id) + "  | " + update.message.from_user.username + " : " + str(msg_list))
+
+    elif msg_list[0] in ["hello","hi", "hey", "sup", "hii"]:
         update.message.reply_text("Hello there!")
         

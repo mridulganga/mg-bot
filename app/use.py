@@ -25,11 +25,11 @@ def use_handler(bot, update, msg_list):
     elif item[:7] == "lootbox":
         loot_class = int(item[7:])
         if loot_class == 100:   # cost 50
-            min_r, max_r = 10, 100
+            min_r, max_r = 20, 200
         elif loot_class == 500: # cost 200
-            min_r, max_r = 50,1000
+            min_r, max_r = 100,1000
         elif loot_class == 1000: # cost 500
-            min_r, max_r = 200, 2000
+            min_r, max_r = 300, 2000
         amount = random.randint(min_r, max_r)
         use_message = " got " + str(amount) + " from their lootbox."
         add_money(chat_id, username, amount)
