@@ -11,6 +11,7 @@ from app.monopoly import mono_handler
 from app.help import help_handler
 from app.administrator import admin_handler
 
+
 animal_list = ["dog","bark","bork","cat","meow","pussy","panda","redpanda",
                 "pika","pikachu","fox"]
 
@@ -19,13 +20,15 @@ fun_list = ["google","joke", "roast", "mock", "meme", "quote", "xkcd", "avatar",
                 "unsplash", "wall", "wallpaper","die", "kill", "wink", "asktrump",
                 "dadjoke", "belikebill", "yesno", "advice", "yomama"]
 
+
 monopoly_list = ["balance", "beg", "daily", "search", "buy", "sell", "use", "steal", "shop", "market", "store", 
                 "purchase", "inventory", "deposit", "withdraw",
                 "lottery", "gamble", "share", "send", "rich", "loan", "bankrob"]
 
+news_list = ["news", "entertainment", "general", "health", "science", "sports", "technology"]
+
 def start(bot, update):
     update.message.reply_text('Hi!')
-
 
 def error(bot, update, msg_list):
     logger.debug("ERROR : " + str(update.message.chat_id) + " - " + update.message.from_user.username + " || " + str(msg_list))
