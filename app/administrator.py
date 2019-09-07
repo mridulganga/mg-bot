@@ -27,3 +27,14 @@ def admin_handler(bot, update, msg_list):
         # pls admin ban @mridul
         if msg_list[2] == "ban":
             user = msg_list[3].replace("@","")
+            ban_time = datetime.datetime.now() + datetime.timedelta(hours=1)
+            bot.kick_chat_member(self, chat_id, user,
+                             timeout=None, until_date=ban_time)
+            update.message.reply_text(user + "Banned for 1 hour. Sorry about that :/. Behave well")
+
+        # unban user
+        # pls admin unban @mridul
+        elif msg_list[2] == "unban":
+            user = msg_list[3].replace("@", "")
+            bot.unban_chat_member(self, chat_id, user, timeout=None)
+            update.message.reply_text(user + "Welcome Back!")
