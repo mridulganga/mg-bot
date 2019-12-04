@@ -1,7 +1,11 @@
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
-
 import os
 import sys
+
+import sentry_sdk
+sentry_sdk.init(os.environ["SENTRY"])
+
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+
 
 import app.basic as basic
 from app.poll import poll_handler
