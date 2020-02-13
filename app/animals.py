@@ -6,8 +6,8 @@ def get_image_url(animal):
         contents = requests.get('https://random.dog/woof.json').json()
         url = contents['url']
     elif animal in ["cat","meow","pussy"]:
-        contents = requests.get('http://aws.random.cat/meow').json()
-        url = contents['file']
+        contents = requests.get('https://api.thecatapi.com/v1/images/search').json()[0]
+        url = contents["url"]
     elif animal in ["panda"]:
         contents = requests.get('https://some-random-api.ml/pandaimg').json()
         url = contents['link']
