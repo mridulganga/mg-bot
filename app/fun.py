@@ -84,6 +84,15 @@ def fun_handler(bot, update, msg_list):
         bot.send_animation(chat_id=update.message.chat_id,
                            animation=contents["link"])
 
+    elif msg_list[1] in ["gif"]:
+        if len(msg_list) < 3:
+            update.message.reply_text("please provide a search term.")
+        else:
+            terms = " ".join(msg_list[2:])
+            contents = requests.get("https://api.giphy.com/v1/gifs/search?api_key="+ os.environ["GIPHY"] +"&q=" + terms + "&limit=1").json()
+            bot.send_animation(chat_id=update.message.chat_id,
+                           animation=contents["data"][0]["images"]["original"]["url"])
+
 
     elif msg_list[1] in ["yesno"]:
         contents = requests.get("https://yesno.wtf/api/").json()
