@@ -1,8 +1,8 @@
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 import telegram
 import datetime
+import logging
 
-from app.logger import logger
 from app.todo import todo_handler
 from app.animals import animal_handler
 from app.fun import fun_handler
@@ -31,7 +31,7 @@ def start(bot, update):
     update.message.reply_text('Hi!')
 
 def error(bot, update, msg_list):
-    logger.debug("ERROR : " + str(update.message.chat_id) + " - " + update.message.from_user.username + " || " + str(msg_list))
+    logging.debug("ERROR : " + str(update.message.chat_id) + " - " + update.message.from_user.username + " || " + str(msg_list))
 
 
 def msg_parser(bot, update):
@@ -69,7 +69,7 @@ def msg_parser(bot, update):
         else:
             error(bot, update, msg_list)
 
-        logger.info(str(update.message.chat_id) + "  | " + update.message.from_user.username + " : " + str(msg_list))
+        logging.info(str(update.message.chat_id) + "  | " + update.message.from_user.username + " : " + str(msg_list))
 
     elif msg_list[0] in ["hello","hi", "hey", "sup", "hii"]:
         update.message.reply_text("Hello there!")

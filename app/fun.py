@@ -2,6 +2,7 @@ from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 import requests
 import telegram
 import random
+import os
 from app.utils import *
 
 
@@ -89,7 +90,7 @@ def fun_handler(bot, update, msg_list):
             update.message.reply_text("please provide a search term.")
         else:
             terms = " ".join(msg_list[2:])
-            contents = requests.get("https://api.giphy.com/v1/gifs/search?api_key="+ os.environ["GIPHY"] +"&q=" + terms + "&limit=1").json()
+            contents = requests.get("https://api.giphy.com/v1/gifs/search?api_key="+ os.environ["GIPHY"] + "&q=" + terms + "&limit=1").json()
             bot.send_animation(chat_id=update.message.chat_id,
                            animation=contents["data"][0]["images"]["original"]["url"])
 
