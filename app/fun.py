@@ -132,6 +132,15 @@ def fun_handler(bot, update, msg_list):
         replies = load_replies("yo_mama")
         reply = choose_random(replies)
         update.message.reply_text(reply)
+    
+    elif msg_list[1] in ["insult"]:
+        if len(msg_list) == 2:
+            uname = update.message.from_user.username
+        else:
+            uname = msg_list[2].replace("@", "")
+        replies = load_replies("insults")
+        reply = "Hey @" + uname + ", " + choose_random(replies)
+        update.message.reply_text(reply)
         
 
     elif msg_list[1] in ["dadjoke"]:

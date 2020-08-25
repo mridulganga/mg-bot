@@ -1,7 +1,7 @@
 import os
 import sys
 import logging
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
 
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 

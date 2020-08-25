@@ -18,7 +18,7 @@ animal_list = ["dog","bark","bork","cat","meow","pussy","panda","redpanda",
 fun_list = ["google","joke", "roast", "mock", "meme", "quote", "xkcd", "avatar", 
                 "geek", "geekjoke", "dice", "coin", "flip", "choose","select",
                 "unsplash", "wall", "wallpaper","die", "kill", "wink", "asktrump",
-                "dadjoke", "belikebill", "yesno", "advice", "yomama","gif"]
+                "dadjoke", "belikebill", "yesno", "advice", "yomama","gif", "insult"]
 
 
 monopoly_list = ["balance", "beg", "daily", "search", "buy", "sell", "use", "steal", "shop", "market", "store", 
@@ -31,7 +31,7 @@ def start(bot, update):
     update.message.reply_text('Hi!')
 
 def error(bot, update, msg_list):
-    logging.debug("ERROR : " + str(update.message.chat_id) + " - " + update.message.from_user.username + " || " + str(msg_list))
+    logging.info("ERROR : " + str(update.message.chat_id) + " - " + update.message.from_user.username + " || " + str(msg_list))
 
 
 def msg_parser(bot, update):
