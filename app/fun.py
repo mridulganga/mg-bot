@@ -147,3 +147,9 @@ def fun_handler(bot, update, msg_list):
         joke = requests.get("https://icanhazdadjoke.com/",
                             headers={"Accept": "text/plain"}).text
         update.message.reply_text(joke)
+
+    elif msg_list[1] in ["compliment", "praise"]:
+        response = requests.get('https://complimentr.com/api')
+        compliment = response.json()['compliment']
+        update.message.reply_text(compliment)
+
