@@ -10,6 +10,7 @@ To add this bot to your telegram group, look for `@themg_bot`.
 - monopoly game
 - poll (not as good as telegram poll)
 - todo list
+- insult using `pls insult @someone`
 etc
 
 
