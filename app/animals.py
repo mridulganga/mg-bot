@@ -9,17 +9,20 @@ def get_image_url(animal):
         contents = requests.get('https://api.thecatapi.com/v1/images/search').json()[0]
         url = contents["url"]
     elif animal in ["panda"]:
-        contents = requests.get('https://some-random-api.ml/pandaimg').json()
+        contents = requests.get('https://some-random-api.ml/img/panda').json()
         url = contents['link']
     elif animal in ["redpanda"]:
-        contents = requests.get('https://some-random-api.ml/redpandaimg').json()
+        contents = requests.get('https://some-random-api.ml/img/red_panda').json()
         url = contents['link']
     elif animal in ["pika","pikachu"]:
-        contents = requests.get('https://some-random-api.ml/pikachuimg').json()
+        contents = requests.get('https://some-random-api.ml/img/pikachu').json()
         url = contents['link']
     elif animal in ["fox"]:
-        contents = requests.get('https://some-random-api.ml/foximg').json()
+        contents = requests.get('https://some-random-api.ml/img/fox').json()
         url = contents['link']
+    elif animal in ['axolotl']:
+        contents = requests.get('https://axoltlapi.herokuapp.com/').json()
+        url = contents['url']
     
     
     elif animal == "movingcat":
