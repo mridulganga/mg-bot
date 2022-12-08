@@ -1,5 +1,5 @@
 asn1crypto==0.24.0
-certifi==2018.11.29
+certifi==2022.12.7
 chardet==3.0.4
 cryptography==3.3.2
 dnspython==1.16.0
